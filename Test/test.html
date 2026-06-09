@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Bougies en Direct Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="min-h-screen py-12">
+
+    <section class="max-w-6xl mx-auto px-6">
+        <h1 class="text-center text-4xl font-bold text-white mb-2">Bougies en Direct</h1>
+        <p class="text-center text-gray-400 mb-12">Prix et chandeliers japonais en temps réel</p>
+
+        <!-- Tabs -->
+        <div class="flex justify-center gap-4 mb-10">
+            <button onclick="switchSymbol(0)" class="tab-btn active px-8 py-4 rounded-2xl text-lg font-semibold">EUR/USD</button>
+            <button onclick="switchSymbol(1)" class="tab-btn px-8 py-4 rounded-2xl text-lg font-semibold">GBP/USD</button>
+            <button onclick="switchSymbol(2)" class="tab-btn px-8 py-4 rounded-2xl text-lg font-semibold">XAU/USD (Gold)</button>
+        </div>
+
+        <div class="card rounded-3xl p-6 shadow-2xl">
+            <!-- TradingView Widget -->
+            <div id="tradingview-widget" style="height: 620px; width: 100%;"></div>
+        </div>
+
+        <div class="text-center mt-8 text-sm text-gray-500">
+            Données en direct fournies par TradingView • Mise à jour automatique
+        </div>
+    </section>
+
+
+
+</body>
+
+</html>

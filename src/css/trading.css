@@ -1,0 +1,22 @@
+body {
+    background: #000018;
+    color: #b5b2b1;
+    font-family: 'Manrope', system-ui, sans-serif;
+}
+
+.card {
+    background: #0b0b1e;
+    border: 1px solid #141439;
+}
+
+.tab-btn {
+    background: #0b0b1e;
+    color: #b5b2b1;
+    border: 1px solid #141439;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: #a86e22;
+    color: white;
+}
