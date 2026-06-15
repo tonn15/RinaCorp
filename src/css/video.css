@@ -1,0 +1,47 @@
+
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-modal.active {
+  display: flex;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.video-container {
+  position: relative;
+  width: 80vh;
+  max-width: 900px;
+  z-index: 2;
+}
+
+
+.video-container video {
+  width: 100%;
+  border-radius: 16px;
+  border: 2px solid #c9a227;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.video-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+}

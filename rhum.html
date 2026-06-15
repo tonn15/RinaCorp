@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaiser Rhum – Boutique Premium – Pablo Corp Madagascar</title>
+    <meta name="description" content="Boutique Kaiser Rhum Madagascar. 6 rhums arrangés premium : Passion, Tropical, Agrumes, Fruits Rouges, Ananas, Coco. 42% vol. 70cl. Livraison." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="src/css/video.css" />
+    <link rel="stylesheet" href="src/css/style.css" />
+    <style>
+      .page-hero {
+        min-height: 60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:140px 0 60px; position:relative; overflow:hidden;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, black 100%), url("src/images/bg-9.png") center center / cover no-repeat;
+      }
+      .page-hero .hero-content { max-width:800px; }
+      .section-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-top:40px; }
+      .feature-block { text-align:center; padding:24px 16px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); }
+      .feature-num { font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--gold); }
+      .feature-label { font-size:13px; color:var(--muted); margin-top:6px; }
+      .rhum-collection { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+      .rhum-hero-banner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; margin-bottom:80px; }
+      .rhum-banner-img { border-radius:var(--r-xl); overflow:hidden; border:1px solid var(--black-border); position:relative; }
+      .rhum-banner-img img { width:100%; height:460px; object-fit:cover; object-position:center top; }
+      .rhum-banner-img::after { content:""; position:absolute; inset:0; background:linear-gradient(to right,transparent 60%,black 100%),linear-gradient(to top,black 0%,transparent 20%); }
+      .about-rhum { max-width:800px; margin:0 auto 60px; text-align:center; }
+      .about-rhum p { font-size:16px; line-height:1.8; }
+      .values { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-top:40px; }
+      .value-card { padding:28px 20px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); text-align:center; }
+      .value-card .ico { font-size:36px; margin-bottom:10px; }
+      .value-card h4 { font-family:var(--font-display); font-size:18px; font-weight:600; color:var(--cream); margin-bottom:6px; }
+      .value-card p { font-size:13px; color:var(--muted); line-height:1.5; }
+      .cart-summary { position:fixed; bottom:90px; right:24px; z-index:300; background:var(--black-card); border:1px solid var(--gold-dim); border-radius:var(--r-md); padding:16px 20px; min-width:220px; opacity:0; transform:translateY(10px); transition:all 0.4s; pointer-events:none; }
+      .cart-summary.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+      .cart-summary h4 { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:10px; }
+      .cart-summary .cart-item { font-size:13px; color:var(--cream-dim); display:flex; justify-content:space-between; gap:16px; padding:4px 0; }
+      .cart-summary .cart-total { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--gold); border-top:1px solid var(--black-border); padding-top:10px; margin-top:8px; text-align:right; }
+      .cart-summary .cart-empty { font-size:13px; color:var(--muted); font-style:italic; }
+      .btn-commander { display:block; width:100%; margin-top:12px; text-align:center; }
+      @media (max-width:1024px) { .rhum-collection{grid-template-columns:repeat(2,1fr)} .rhum-hero-banner{grid-template-columns:1fr} .rhum-banner-img{display:none} }
+      @media (max-width:768px) { .rhum-collection{grid-template-columns:1fr} }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="navbar scrolled" id="navbar" role="banner">
+      <nav class="navbar-inner">
+        <a href="index.html" class="nav-logo"><img src="src/images/logo.png" alt="" /></a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="trading.html">Trading</a></li>
+          <li><a href="asaenligne.html">Asa En Ligne</a></li>
+          <li><a href="rhum.html" style="color:var(--gold)">Kaiser Rhum</a></li>
+          <li><a href="index.html#donation">Soutenir</a></li>
+        </ul>
+        <div class="nav-actions" id="navActions">
+          <a href="rhum.html" class="btn btn-gold btn-sm" style="font-size:15px;padding:10px 20px">BOUTIQUE</a>
+          <a href="rhum.html" style="font-size:15px;padding:10px 20px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><circle opacity="0.5" cx="12" cy="9" r="3" stroke="#c9a227" stroke-width="1.5"/><circle cx="12" cy="12" r="10" stroke="#c9a227" stroke-width="1.5"/><path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15 7.0752 15 6.1899 17.1085 6.0308 20" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="hero-badge-dot"></span>Boutique Premium · Madagascar</div>
+        <h1 class="display-xl" style="margin-bottom:8px">Kaiser<span class="hero-title-empire">Rhum</span></h1>
+        <p class="body-lg" style="max-width:620px;margin:10px auto 0;font-size:clamp(16px,2vw,20px)">
+          Rhum arrangé premium made in Madagascar. 42% vol., 70cl — six expressions uniques élaborées avec passion.
+        </p>
+        <div class="hero-cta" style="margin-top:30px;margin-bottom:20px">
+          <a href="#collection" class="btn btn-gold">Voir la collection ▼</a>
+          <a href="#histoire" class="btn btn-outline">Notre histoire</a>
+        </div>
+        <div class="section-features" style="margin-top:10px">
+          <div class="feature-block"><div class="feature-num">6</div><div class="feature-label">Expressions</div></div>
+          <div class="feature-block"><div class="feature-num">42°</div><div class="feature-label">Alcool</div></div>
+          <div class="feature-block"><div class="feature-num">70cl</div><div class="feature-label">Contenance</div></div>
+          <div class="feature-block"><div class="feature-num">35 000 Ar</div><div class="feature-label">Le flacon</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTOIRE -->
+    <section class="section" id="histoire">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Notre histoire</p>
+          <h2 class="display-lg" style="margin-top:10px">L'Art du Rhum à la Malgache</h2>
+          <span class="gold-rule"></span>
+        </div>
+        <div class="about-rhum" data-reveal>
+          <p class="body-lg">
+            Kaiser Rhum est né d'une passion pour les saveurs authentiques de Madagascar. Chaque bouteille est le fruit d'une sélection rigoureuse d'ingrédients locaux et exotiques, macérés dans un rhum blanc de qualité supérieure.
+          </p>
+          <p class="body-lg" style="margin-top:16px">
+            De la passion intense à la douceur onctueuse du coco, chaque expression raconte une histoire — celle d'un savoir-faire artisanal qui honore la richesse de notre île.
+          </p>
+        </div>
+        <div class="values" data-reveal>
+          <div class="value-card">
+            <div class="ico">🌿</div>
+            <h4>Ingrédients Naturels</h4>
+            <p>Fruits frais, épices des Îles, vanille Bourbon — zéro arôme artificiel.</p>
+          </div>
+          <div class="value-card">
+            <div class="ico">🧑‍🌾</div>
+            <h4>Fait Main</h4>
+            <p>Chaque bouteille est préparée artisanalement, en petites séries.</p>
+          </div>
+          <div class="value-card">
+            <div class="ico">🇲🇬</div>
+            <h4>100% Malgache</h4>
+            <p>De la sélection des ingrédients à l'embouteillage — tout est local.</p>
+          </div>
+          <div class="value-card">
+            <div class="ico">🎁</div>
+            <h4>Prêt à Offrir</h4>
+            <p>Packaging premium, idéal pour cadeaux et événements spéciaux.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- BANNER -->
+    <section class="section" style="padding-bottom:20px">
+      <div class="container">
+        <div class="rhum-hero-banner" data-reveal>
+          <div>
+            <div class="rhum-badge-row">
+              <span class="rhum-badge">🇲🇬 Rhum Local Madagascar</span>
+              <span class="rhum-badge">42% Vol.</span>
+              <span class="rhum-badge">70 CL</span>
+              <span class="rhum-badge">Artisanal</span>
+            </div>
+            <h3 class="display-md" style="margin-bottom:16px;font-style:italic">L'Art du Rhum Premium</h3>
+            <p class="body-lg" style="margin-bottom:28px">
+              Chaque bouteille Kaiser est unique. Des arômes intenses de la passion à la rondeur vanillée du coco, il y a un Kaiser pour chaque moment.
+            </p>
+            <div style="display:flex;gap:20px;margin-bottom:32px;flex-wrap:wrap">
+              <div><div style="font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--gold)">6</div><div style="font-size:13px;color:var(--muted)">Expressions uniques</div></div>
+              <div style="width:1px;background:var(--black-border)"></div>
+              <div><div style="font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--gold)">42°</div><div style="font-size:13px;color:var(--muted)">Degré alcool</div></div>
+              <div style="width:1px;background:var(--black-border)"></div>
+              <div><div style="font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--gold)">70cl</div><div style="font-size:13px;color:var(--muted)">Contenance</div></div>
+            </div>
+            <a href="#" onclick="commanderCollection();return false" class="btn btn-gold">Commander la collection →</a>
+          </div>
+          <div class="rhum-banner-img">
+            <img src="src/images/rhum.jpeg" alt="Kaiser Rhum Collection" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- COLLECTION -->
+    <section class="section" id="collection" style="background:linear-gradient(180deg,var(--black) 0%,#050402 100%)">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Notre Collection</p>
+          <h2 class="display-lg" style="margin-top:10px">Choisissez votre expression</h2>
+          <p class="body-lg" style="max-width:560px;margin:14px auto 0">
+            Passez la souris sur une carte pour découvrir ses arômes. Ajoutez au panier et commandez en un clic.
+          </p>
+          <span class="gold-rule"></span>
+        </div>
+
+        <div class="rhum-collection" data-reveal>
+          <!-- Passion -->
+          <div class="rhum-card rhum-passion card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Passion</div>
+              <div class="rhum-card-desc">Exotique &amp; Intense</div>
+              <div class="rhum-card-ingredients">Fruit de la Passion · Passion</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Passion')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+          <!-- Tropical -->
+          <div class="rhum-card rhum-tropical card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Tropical</div>
+              <div class="rhum-card-desc">Gourmand &amp; Ensoleillé</div>
+              <div class="rhum-card-ingredients">Ananas · Mangue · Fruit de la Passion</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Tropical')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+          <!-- Agrumes -->
+          <div class="rhum-card rhum-agrumes card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Agrumes</div>
+              <div class="rhum-card-desc">Frais &amp; Équilibré</div>
+              <div class="rhum-card-ingredients">Orange · Citron · Combava</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Agrumes')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+          <!-- Fruits Rouges -->
+          <div class="rhum-card rhum-fruits card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Fruits Rouges</div>
+              <div class="rhum-card-desc">Fruité &amp; Délicat</div>
+              <div class="rhum-card-ingredients">Grenadine · Fraise · Framboise</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Fruits Rouges')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+          <!-- Ananas -->
+          <div class="rhum-card rhum-ananas card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Ananas</div>
+              <div class="rhum-card-desc">Épicé &amp; Chaleureux</div>
+              <div class="rhum-card-ingredients">Épices des Îles · Cannelle · Badiane</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Ananas')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+          <!-- Coco -->
+          <div class="rhum-card rhum-coco card-hover">
+            <div class="rhum-card-bg"></div>
+            <div class="rhum-card-content">
+              <div class="rhum-card-label">Rhum Arrangé Premium</div>
+              <div class="rhum-card-name">Coco</div>
+              <div class="rhum-card-desc">Doux &amp; Onctueux</div>
+              <div class="rhum-card-ingredients">Vanille Bourbon</div>
+              <div class="rhum-card-footer">
+                <div><div class="rhum-card-price">35 000 Ar</div><div class="rhum-card-vol">42% vol. · 70cl</div></div>
+                <button class="rhum-btn" onclick="addToCart('Kaiser Coco')">+ Panier</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:24px;font-style:italic" data-reveal>
+          ⚠️ La consommation d'alcool est réservée aux personnes majeures · Consommez avec modération
+        </p>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="donation-inner" data-reveal>
+          <p class="eyebrow">Vous avez une question ?</p>
+          <h2 class="display-lg" style="margin-top:10px;margin-bottom:16px">Contactez-nous</h2>
+          <p class="body-lg" style="max-width:520px;margin:0 auto 24px">
+            Commandes en gros, événements, partenariats ou simple curieux — on est là pour vous.
+          </p>
+          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+            <a href="#" onclick="showToast('📩 Contactez-nous par message !');return false" class="btn btn-gold">💬 Nous écrire</a>
+            <a href="index.html#donation" class="btn btn-outline">Soutenir Pablo Corp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <img src="src/images/logo.png" alt="Pablo Corp" style="height:45px;width:auto;margin-bottom:18px" />
+            <p class="footer-desc">L'empire du savoir et du goût. Formations gratuites · Rhum Kaiser premium · Made in Madagascar.</p>
+          </div>
+          <div>
+            <p class="footer-col-title">Formations</p>
+            <ul class="footer-links-list">
+              <li><a href="trading.html">Trading Forex</a></li>
+              <li><a href="asaenligne.html">Asa En Ligne</a></li>
+              <li><a href="trading.html#modules">Analyse Technique</a></li>
+              <li><a href="asaenligne.html">Freelance</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Boutique</p>
+            <ul class="footer-links-list">
+              <li><a href="rhum.html">Kaiser Passion</a></li>
+              <li><a href="rhum.html">Kaiser Tropical</a></li>
+              <li><a href="rhum.html">Kaiser Agrumes</a></li>
+              <li><a href="rhum.html">Toute la collection →</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Pablo Corp</p>
+            <ul class="footer-links-list">
+              <li><a href="index.html#donation">Soutenir</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Confidentialité</a></li>
+              <li><a href="#">CGV</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2026 Pablo Corp. Tous droits réservés.</p>
+          <p class="footer-tagline">Élaboré avec passion pour les connaisseurs · Madagascar 🇲🇬</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"><span class="toast-icon">🥃</span><span id="toastMsg">Ajouté au panier !</span></div>
+
+    <!-- CART SUMMARY -->
+    <div class="cart-summary" id="cartSummary">
+      <h4>🛒 Mon Panier</h4>
+      <div id="cartItems"><p class="cart-empty">Vide</p></div>
+      <div class="cart-total" id="cartTotal">0 Ar</div>
+      <a href="#" onclick="commanderPanier();return false" class="btn btn-gold btn-commander" style="font-size:13px;padding:8px 16px">Commander →</a>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="src/scripts/main.js"></script>
+    <script>
+      (function(){
+        var cart={},summary=document.getElementById("cartSummary"),itemsEl=document.getElementById("cartItems"),totalEl=document.getElementById("cartTotal");
+        window.addToCart=function(name){cart[name]=(cart[name]||0)+1;renderCart();showToast("🥃 "+name+" ajouté ! (x"+cart[name]+")");summary.classList.add("visible")};
+        function renderCart(){var keys=Object.keys(cart);if(keys.length===0){itemsEl.innerHTML='<p class="cart-empty">Vide</p>';totalEl.textContent="0 Ar";summary.classList.remove("visible");return}
+        var html="",total=0;keys.forEach(function(k){var qty=cart[k],subtotal=qty*35000;total+=subtotal;html+='<div class="cart-item"><span>'+k+' x'+qty+'</span><span>'+subtotal.toLocaleString("fr")+' Ar</span></div>'});itemsEl.innerHTML=html;totalEl.textContent=total.toLocaleString("fr")+" Ar"}
+        window.commanderPanier=function(){var keys=Object.keys(cart);if(keys.length===0){showToast("🛒 Votre panier est vide");return}
+        var msg="🛍 *Nouvelle commande Kaiser Rhum*%0A";keys.forEach(function(k){msg+="• "+k+" x"+cart[k]+"%0A"});msg+="%0A💰 *Total : "+totalEl.textContent+"*";window.open("https://wa.me/?text="+msg,"_blank")}
+        window.commanderCollection=function(){showToast("📩 Commande par message — contactez-nous !")}
+      })();
+    </script>
+  </body>
+</html>

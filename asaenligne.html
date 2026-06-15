@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asa En Ligne – Formation Gratuite – Pablo Corp Madagascar</title>
+    <meta name="description" content="Formation gratuite pour gagner de l'argent en ligne depuis Madagascar. Copywriting, design, e-commerce, freelance, IA — 6 modules vidéo." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="src/css/video.css" />
+    <link rel="stylesheet" href="src/css/style.css" />
+    <style>
+      .page-hero {
+        min-height: 60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:140px 0 60px; position:relative; overflow:hidden;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, black 100%), url("src/images/bg-3.png") center center / cover no-repeat;
+      }
+      .page-hero .hero-content { max-width:800px; }
+      .section-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-top:40px; }
+      .feature-block { text-align:center; padding:24px 16px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); }
+      .feature-num { font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--gold); }
+      .feature-label { font-size:13px; color:var(--muted); margin-top:6px; }
+      .video-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px; margin-top:50px; }
+      .video-card { background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-lg); overflow:hidden; cursor:pointer; transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+      .video-card:hover { border-color:var(--gold-dim); transform:translateY(-4px); box-shadow:0 12px 40px rgba(201,162,39,0.12); }
+      .video-thumb { position:relative; height:180px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+      .video-thumb .play-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); transition:background 0.3s; }
+      .video-thumb .play-overlay svg { width:56px; height:56px; opacity:0.9; transition:transform 0.3s, opacity 0.3s; }
+      .video-card:hover .play-overlay { background:rgba(0,0,0,0.1); }
+      .video-card:hover .play-overlay svg { transform:scale(1.15); opacity:1; }
+      .video-meta { padding:20px; }
+      .video-meta h3 { font-family:var(--font-display); font-size:20px; font-weight:600; color:var(--cream); margin-bottom:6px; }
+      .video-meta p { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:12px; }
+      .video-meta .row { display:flex; align-items:center; justify-content:space-between; font-size:13px; }
+      .video-meta .row .tag { display:inline-block; padding:2px 12px; border-radius:100px; background:rgba(201,162,39,0.1); color:var(--gold); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+      .video-meta .row .tag-premium { background:rgba(201,162,39,0.15); color:var(--gold-light); }
+      .video-meta .row .duration { color:var(--muted); }
+      .theme-bg-1 { background:linear-gradient(145deg,#1a0e02,#0d0802); }
+      .theme-bg-2 { background:linear-gradient(145deg,#0a1e2a,#02090e); }
+      .theme-bg-3 { background:linear-gradient(145deg,#1a0520,#0d0010); }
+      .theme-bg-4 { background:linear-gradient(145deg,#0a2a0e,#020d04); }
+      .theme-bg-5 { background:linear-gradient(145deg,#2a0a0a,#0d0202); }
+      .theme-bg-6 { background:linear-gradient(145deg,#0a0a1e,#02020c); }
+      .skills-big-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:14px; margin-top:30px; }
+      .skill-item { text-align:center; padding:20px 12px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); transition:border-color 0.2s; }
+      .skill-item:hover { border-color:var(--gold-dim); }
+      .skill-item .icon { font-size:32px; margin-bottom:8px; }
+      .skill-item .name { font-size:13px; font-weight:600; color:var(--cream-dim); }
+      .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-top:40px; counter-reset:step; }
+      .step-card { counter-increment:step; padding:28px 20px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); text-align:center; }
+      .step-card::before { content:"0" counter(step); font-family:var(--font-display); font-size:42px; font-weight:900; color:rgba(201,162,39,0.1); display:block; }
+      .step-card h3 { font-family:var(--font-display); font-size:18px; font-weight:600; color:var(--cream); margin:8px 0 6px; }
+      .step-card p { font-size:13px; color:var(--muted); line-height:1.5; }
+      @media (max-width:768px) { .video-grid { grid-template-columns:1fr; } }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <header class="navbar scrolled" id="navbar" role="banner">
+      <nav class="navbar-inner">
+        <a href="index.html" class="nav-logo"><img src="src/images/logo.png" alt="" /></a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="trading.html">Trading</a></li>
+          <li><a href="asaenligne.html" style="color:var(--gold)">Asa En Ligne</a></li>
+          <li><a href="rhum.html">Kaiser Rhum</a></li>
+          <li><a href="index.html#donation">Soutenir</a></li>
+        </ul>
+        <div class="nav-actions" id="navActions">
+          <a href="rhum.html" class="btn btn-gold btn-sm" style="font-size:15px;padding:10px 20px">BOUTIQUE</a>
+          <a href="rhum.html" style="font-size:15px;padding:10px 20px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><circle opacity="0.5" cx="12" cy="9" r="3" stroke="#c9a227" stroke-width="1.5"/><circle cx="12" cy="12" r="10" stroke="#c9a227" stroke-width="1.5"/><path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15 7.0752 15 6.1899 17.1085 6.0308 20" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="hero-badge-dot"></span>100% Gratuit · Travail En Ligne</div>
+        <h1 class="display-xl" style="margin-bottom:8px">Asa<span class="hero-title-empire">En Ligne</span></h1>
+        <p class="body-lg" style="max-width:620px;margin:10px auto 0;font-size:clamp(16px,2vw,20px)">
+          Gagnez vos premiers revenus sur internet depuis Madagascar. Sans capital, sans diplôme — juste une connexion et de la motivation.
+        </p>
+        <div class="hero-cta" style="margin-top:30px;margin-bottom:20px">
+          <a href="#modules" class="btn btn-gold">Voir les modules ▼</a>
+          <a href="#pourquoi" class="btn btn-outline">Pourquoi Asa En Ligne ?</a>
+        </div>
+        <div class="section-features" style="margin-top:10px">
+          <div class="feature-block"><div class="feature-num">12+</div><div class="feature-label">Modules & leçons</div></div>
+          <div class="feature-block"><div class="feature-num">6h+</div><div class="feature-label">De contenu vidéo</div></div>
+          <div class="feature-block"><div class="feature-num">∞</div><div class="feature-label">Accès à vie</div></div>
+          <div class="feature-block"><div class="feature-num">0 Ar</div><div class="feature-label">Entièrement gratuit</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- POURQUOI -->
+    <section class="section" id="pourquoi">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Pourquoi Asa En Ligne ?</p>
+          <h2 class="display-lg" style="margin-top:10px">Le travail en ligne à la portée de tous</h2>
+          <p class="body-lg" style="max-width:600px;margin:14px auto 0">
+            Que vous soyez étudiant, parent au foyer ou salarié, les opportunités en ligne n'ont jamais été aussi accessibles.
+          </p>
+          <span class="gold-rule"></span>
+        </div>
+        <div class="steps" data-reveal>
+          <div class="step-card">
+            <h3>Choisissez votre domaine</h3>
+            <p>Copywriting, design, e-commerce, data entry — il y en a pour tous les goûts.</p>
+          </div>
+          <div class="step-card">
+            <h3>Formez-vous gratuitement</h3>
+            <p>Suivez les modules vidéo à votre rythme, depuis chez vous.</p>
+          </div>
+          <div class="step-card">
+            <h3>Gagnez vos premiers revenus</h3>
+            <p>Mettez en pratique, trouvez des clients et construisez votre liberté financière.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- COMPÉTENCES -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Compétences enseignées</p>
+          <h2 class="display-lg" style="margin-top:10px">Ce que vous allez apprendre</h2>
+          <span class="gold-rule"></span>
+        </div>
+        <div class="skills-big-grid" data-reveal>
+          <div class="skill-item"><div class="icon">✍️</div><div class="name">Copywriting</div></div>
+          <div class="skill-item"><div class="icon">🎨</div><div class="name">Design Canva</div></div>
+          <div class="skill-item"><div class="icon">🌐</div><div class="name">WordPress</div></div>
+          <div class="skill-item"><div class="icon">📱</div><div class="name">Réseaux Sociaux</div></div>
+          <div class="skill-item"><div class="icon">🛒</div><div class="name">E-commerce</div></div>
+          <div class="skill-item"><div class="icon">🤖</div><div class="name">IA & Outils</div></div>
+          <div class="skill-item"><div class="icon">🎬</div><div class="name">Vidéo & Montage</div></div>
+          <div class="skill-item"><div class="icon">📊</div><div class="name">Data Entry</div></div>
+          <div class="skill-item"><div class="icon">📈</div><div class="name">Marketing</div></div>
+          <div class="skill-item"><div class="icon">💻</div><div class="name">Freelance</div></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- MODULES -->
+    <section class="section" id="modules">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="eyebrow">Programme complet</p>
+          <h2 class="display-lg" style="margin-top:10px">Les modules de formation</h2>
+          <p class="body-lg" style="max-width:560px;margin:14px auto 0">
+            Cliquez sur une vidéo pour la lancer. Certains modules avancés sont marqués Premium.
+          </p>
+          <span class="gold-rule"></span>
+        </div>
+
+        <div class="video-grid" data-reveal>
+          <!-- 1 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-1">
+              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 1</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">01</div>
+            </div>
+            <div class="video-meta">
+              <h3>Introduction au travail en ligne</h3>
+              <p>Les bases de l'écosystème digital : plateformes, opportunités, mind-set et organisation pour réussir en ligne.</p>
+              <div class="row"><span class="tag">Débutant</span><span class="duration">45 min</span></div>
+            </div>
+          </div>
+          <!-- 2 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-2">
+              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 2</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">02</div>
+            </div>
+            <div class="video-meta">
+              <h3>Créer son profil Fiverr & Upwork</h3>
+              <p>Profil optimisé, bio qui convertit, portfolio, stratégie de prix et comment décrocher ses premières missions.</p>
+              <div class="row"><span class="tag">Débutant</span><span class="duration">52 min</span></div>
+            </div>
+          </div>
+          <!-- 3 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-3">
+              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 3</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">03</div>
+            </div>
+            <div class="video-meta">
+              <h3>Copywriting & rédaction web</h3>
+              <p>Techniques de copywriting, storytelling, structuration d'articles, SEO et rédaction pour les réseaux sociaux.</p>
+              <div class="row"><span class="tag">Intermédiaire</span><span class="duration">1h 10min</span></div>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-4">
+              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 4</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">04</div>
+            </div>
+            <div class="video-meta">
+              <h3>Design avec Canva Pro</h3>
+              <p>Créez des visuels professionnels : templates, brand kit, animations et export pour tous les formats.</p>
+              <div class="row"><span class="tag">Débutant</span><span class="duration">48 min</span></div>
+            </div>
+          </div>
+          <!-- 5 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-5">
+              <span class="module-tag" style="position:absolute;top:14px;left:14px;margin:0;background:rgba(201,162,39,0.12);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:100px;">Premium</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">05</div>
+            </div>
+            <div class="video-meta">
+              <h3>Affiliation & marketing digital</h3>
+              <p>Marketing d'affiliation, campagnes publicitaires, email marketing, funnel de vente et monétisation d'audience.</p>
+              <div class="row"><span class="tag tag-premium">Premium</span><span class="duration">1h 05min</span></div>
+            </div>
+          </div>
+          <!-- 6 -->
+          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
+            <div class="video-thumb theme-bg-6">
+              <span class="module-tag" style="position:absolute;top:14px;left:14px;margin:0;background:rgba(201,162,39,0.12);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:100px;">Premium</span>
+              <div class="play-overlay">
+                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">06</div>
+            </div>
+            <div class="video-meta">
+              <h3>Créer et vendre sa formation</h3>
+              <p>De l'idée à la vente : structurer son savoir, produire les vidéos, plateformes, pricing et lancement.</p>
+              <div class="row"><span class="tag tag-premium">Premium</span><span class="duration">1h 30min</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="donation-inner" data-reveal>
+          <p class="eyebrow">Prêt à commencer ?</p>
+          <h2 class="display-lg" style="margin-top:10px;margin-bottom:16px">Rejoignez la formation</h2>
+          <p class="body-lg" style="max-width:520px;margin:0 auto 24px">
+            Tout est gratuit. Aucune inscription. Lancez-vous dès maintenant.
+          </p>
+          <a href="#modules" class="btn btn-gold">Commencer le Module 1 ▶</a>
+          <p style="margin-top:16px;font-size:13px;color:var(--muted)">🔓 Déjà +150 étudiants formés</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <img src="src/images/logo.png" alt="Pablo Corp" style="height:45px;width:auto;margin-bottom:18px" />
+            <p class="footer-desc">L'empire du savoir et du goût. Formations gratuites · Rhum Kaiser premium · Made in Madagascar.</p>
+          </div>
+          <div>
+            <p class="footer-col-title">Formations</p>
+            <ul class="footer-links-list">
+              <li><a href="trading.html">Trading Forex</a></li>
+              <li><a href="asaenligne.html">Asa En Ligne</a></li>
+              <li><a href="trading.html#modules">Analyse Technique</a></li>
+              <li><a href="asaenligne.html">Freelance</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Boutique</p>
+            <ul class="footer-links-list">
+              <li><a href="rhum.html">Kaiser Passion</a></li>
+              <li><a href="rhum.html">Kaiser Tropical</a></li>
+              <li><a href="rhum.html">Kaiser Agrumes</a></li>
+              <li><a href="rhum.html">Toute la collection →</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Pablo Corp</p>
+            <ul class="footer-links-list">
+              <li><a href="index.html#donation">Soutenir</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Confidentialité</a></li>
+              <li><a href="#">CGV</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2026 Pablo Corp. Tous droits réservés.</p>
+          <p class="footer-tagline">Élaboré avec passion pour les connaisseurs · Madagascar 🇲🇬</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"><span class="toast-icon">▶</span><span id="toastMsg">Lecture en cours…</span></div>
+
+    <!-- MODAL VIDEO -->
+    <div class="video-modal" id="videoModal">
+      <div class="video-overlay"></div>
+      <div class="video-container">
+        <button class="video-close" id="closeVideo">&times;</button>
+        <video id="promoVideo" controls><source src="src/videos/presentation.mp4" type="video/mp4"/>Votre navigateur ne supporte pas la vidéo.</video>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="src/scripts/main.js"></script>
+    <script>
+      (function(){
+        var modal=document.getElementById("videoModal"),video=document.getElementById("promoVideo"),source=video.querySelector("source"),closeBtn=document.getElementById("closeVideo"),overlay=document.querySelector(".video-overlay");
+        document.querySelectorAll(".openVideo").forEach(function(b){b.addEventListener("click",function(){var s=this.getAttribute("data-video");if(s){source.setAttribute("src",s);video.load()}modal.classList.add("active");video.play()})});
+        function close(){modal.classList.remove("active");video.pause();video.currentTime=0}
+        closeBtn.addEventListener("click",close);overlay.addEventListener("click",close);
+      })();
+    </script>
+  </body>
+</html>
