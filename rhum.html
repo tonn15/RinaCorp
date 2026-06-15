@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="src/css/video.css" />
     <link rel="stylesheet" href="src/css/style.css" />
     <style>
-      .cart-summary { position:fixed; bottom:90px; right:24px; z-index:300; background:var(--black-card); border:1px solid var(--gold-dim); border-radius:var(--r-md); padding:16px 20px; min-width:250px; opacity:0; transform:translateY(10px); transition:all 0.4s; pointer-events:none; }
+      .cart-summary { position:fixed; bottom:80px; right:24px; z-index:300; background:var(--black-card); border:1px solid var(--gold-dim); border-radius:var(--r-md); padding:16px 20px; min-width:260px; opacity:0; transform:translateY(10px); transition:all 0.4s; pointer-events:none; box-shadow:0 8px 32px rgba(0,0,0,0.6); }
       .cart-summary.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
       .cart-summary h4 { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:10px; }
       .cart-summary .cart-item { font-size:13px; color:var(--cream-dim); display:flex; justify-content:space-between; gap:16px; padding:4px 0; }
@@ -20,6 +20,11 @@
       .cart-summary input { width:100%; padding:8px 10px; margin-bottom:8px; background:#111; border:1px solid var(--black-border); border-radius:6px; color:var(--cream); font-size:13px; font-family:inherit; box-sizing:border-box; outline:none; transition:border-color 0.2s; }
       .cart-summary input:focus { border-color:var(--gold-dim); }
       .cart-summary input::placeholder { color:var(--muted); }
+      .cart-qty-btn { background:none; border:1px solid var(--black-border); border-radius:4px; color:var(--cream); cursor:pointer; font-size:14px; width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; transition:border-color 0.2s; padding:0; line-height:1; }
+      .cart-qty-btn:hover { border-color:var(--gold-dim); }
+      .cart-qty-btn.del { border-color:transparent; color:#e74c3c; width:auto; }
+      .cart-qty-btn.del:hover { border-color:transparent; color:#ff6b6b; }
+      .cart-item-actions { display:flex; align-items:center; gap:6px; }
       .btn-commander { display:block; width:100%; margin-top:8px; text-align:center; }
       @media (max-width:768px) { .rhum-grid { grid-template-columns:1fr; } }
     </style>
@@ -37,9 +42,13 @@
         </ul>
         <div class="nav-actions" id="navActions">
           <a href="rhum.html" class="btn btn-gold btn-sm" style="font-size:15px;padding:10px 20px">BOUTIQUE</a>
-          <a href="rhum.html" style="font-size:15px;padding:10px 20px">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><circle opacity="0.5" cx="12" cy="9" r="3" stroke="#c9a227" stroke-width="1.5"/><circle cx="12" cy="12" r="10" stroke="#c9a227" stroke-width="1.5"/><path opacity="0.5" d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15 7.0752 15 6.1899 17.1085 6.0308 20" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </a>
+          <button id="cartToggle" style="background:none;border:none;cursor:pointer;position:relative;padding:10px 14px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#c9a227" stroke-width="1.5">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <span id="cartBadge" style="position:absolute;top:4px;right:6px;background:#c9a227;color:#000;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;line-height:1">0</span>
+          </button>
         </div>
         <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
       </nav>
@@ -214,7 +223,10 @@
 
     <!-- CART SUMMARY -->
     <div class="cart-summary" id="cartSummary">
-      <h4>🛒 Mon Panier</h4>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h4 style="margin:0">🛒 Mon Panier</h4>
+        <button id="cartClose" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;padding:0 4px">&times;</button>
+      </div>
       <div id="cartItems"><p class="cart-empty">Vide</p></div>
       <div class="cart-total" id="cartTotal">0 Ar</div>
       <input type="email" id="cartEmail" placeholder="Votre email" autocomplete="email" />
@@ -222,22 +234,58 @@
       <a href="#" onclick="commanderPanier();return false" class="btn btn-gold btn-commander" style="font-size:13px;padding:8px 16px">Commander →</a>
     </div>
 
+    <!-- STICKY CTA -->
+    <div class="sticky-cta visible" id="stickyCta">
+      <a href="https://t.me/+261342120803" class="btn btn-gold btn-telegram" style="box-shadow: 0 8px 32px rgba(201, 162, 39, 0.4)">
+        <svg width="34px" height="34px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#f0e6c8" stroke="#f0e6c8">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <title>telegram_fill</title>
+            <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Brand" transform="translate(-672.000000, -48.000000)">
+                <g id="telegram_fill" transform="translate(672.000000, 48.000000)">
+                  <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"></path>
+                  <path d="M19.7773,4.42984 C20.8652,3.97177 22.0315,4.8917 21.8394,6.05639 L19.5705,19.8131 C19.3517,21.1395 17.8949,21.9006 16.678,21.2396 C15.6597,20.6865 14.1489,19.8352 12.7873,18.9455 C12.1074,18.5012 10.0255,17.0766 10.2814,16.0625 C10.5002,15.1954 14.0001,11.9375 16.0001,10 C16.7857,9.23893 16.4279,8.79926 15.5001,9.5 C13.1985,11.2383 9.50332,13.8812 8.28136,14.625 C7.20323,15.2812 6.64031,15.3932 5.96886,15.2812 C4.74273,15.0769 3.60596,14.7605 2.67788,14.3758 C1.42351,13.8558 1.48461,12.132 2.67703,11.63 L19.7773,4.42984 Z" id="路径" fill="#f0e6c8"></path>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </a>
+    </div>
+
     <!-- SCRIPTS -->
     <script src="src/scripts/main.js"></script>
     <script>
       (function(){
-        var cart={},summary=document.getElementById("cartSummary"),itemsEl=document.getElementById("cartItems"),totalEl=document.getElementById("cartTotal");
-        window.addToCart=function(name){cart[name]=(cart[name]||0)+1;renderCart();showToast("🥃 "+name+" ajouté ! (x"+cart[name]+")");summary.classList.add("visible")};
-        function renderCart(){var keys=Object.keys(cart);if(keys.length===0){itemsEl.innerHTML='<p class="cart-empty">Vide</p>';totalEl.textContent="0 Ar";summary.classList.remove("visible");return}
-        var html="",total=0;keys.forEach(function(k){var qty=cart[k],subtotal=qty*35000;total+=subtotal;html+='<div class="cart-item"><span>'+k+' x'+qty+'</span><span>'+subtotal.toLocaleString("fr")+' Ar</span></div>'});itemsEl.innerHTML=html;totalEl.textContent=total.toLocaleString("fr")+" Ar"}
-        window.commanderPanier=function(){var keys=Object.keys(cart);if(keys.length===0){showToast("🛒 Votre panier est vide");return}
+        var cart={},summary=document.getElementById("cartSummary"),itemsEl=document.getElementById("cartItems"),totalEl=document.getElementById("cartTotal"),badge=document.getElementById("cartBadge"),toggle=document.getElementById("cartToggle"),closeBtn=document.getElementById("cartClose");
+        function updateBadge(){var n=Object.values(cart).reduce(function(a,b){return a+b},0);badge.textContent=n;badge.style.display=n>0?"flex":"none"}
+        function saveCart(){try {localStorage.setItem("rhum_cart",JSON.stringify(cart))}catch(e){}}
+        function loadCart(){try {var d=localStorage.getItem("rhum_cart");if(d){cart=JSON.parse(d);renderCart();updateBadge()}}catch(e){}}
+        window.addToCart=function(name){cart[name]=(cart[name]||0)+1;renderCart();updateBadge();saveCart()};
+        window.incCart=function(name){cart[name]=(cart[name]||0)+1;renderCart();updateBadge();saveCart()};
+        window.decCart=function(name){if(cart[name]>1){cart[name]--}else{delete cart[name]};renderCart();updateBadge();saveCart()};
+        window.delCart=function(name){delete cart[name];renderCart();updateBadge();saveCart()};
+        function renderCart(){var keys=Object.keys(cart);if(keys.length===0){itemsEl.innerHTML='<p class="cart-empty">Vide</p>';totalEl.textContent="0 Ar";updateBadge();saveCart();return}
+        var html="",total=0;keys.forEach(function(k){var qty=cart[k],subtotal=qty*35000;total+=subtotal;
+        html+='<div class="cart-item"><span>'+k+'</span><span class="cart-item-actions">';
+        html+='<button class="cart-qty-btn del" onclick="delCart(\''+k+'\')">🗑</button>';
+        html+='<button class="cart-qty-btn" onclick="decCart(\''+k+'\')">−</button>';
+        html+='<span style="min-width:20px;text-align:center;font-weight:600">'+qty+'</span>';
+        html+='<button class="cart-qty-btn" onclick="incCart(\''+k+'\')">+</button>';
+        html+='<span style="min-width:70px;text-align:right">'+subtotal.toLocaleString("fr")+' Ar</span></span></div>'});
+        itemsEl.innerHTML=html;totalEl.textContent=total.toLocaleString("fr")+" Ar"}
+        toggle.addEventListener("click",function(){summary.classList.toggle("visible")});
+        closeBtn.addEventListener("click",function(){summary.classList.remove("visible")});
+        window.commanderPanier=function(){var keys=Object.keys(cart);if(keys.length===0){alert("🛒 Votre panier est vide");return}
         var email=document.getElementById("cartEmail").value.trim(),phone=document.getElementById("cartPhone").value.trim();
-        if(!email||!phone){showToast("📝 Remplissez votre email et téléphone");return}
-        if(!email.includes("@")){showToast("📧 Email invalide");return}
+        if(!email||!phone){alert("📝 Remplissez votre email et téléphone");return}
+        if(!email.includes("@")){alert("📧 Email invalide");return}
         var msg="🛍 *Nouvelle commande Kaiser Rhum*%0A%0A";keys.forEach(function(k){msg+="• "+k+" x"+cart[k]+"%0A"});
         msg+="%0A💰 *Total : "+totalEl.textContent+"*";msg+="%0A📧 Email : "+encodeURIComponent(email);msg+="%0A📞 Tél : "+encodeURIComponent(phone);
         window.open("https://wa.me/?text="+msg,"_blank")}
-        window.commanderCollection=function(){showToast("📩 Commande par message — contactez-nous !")}
+        loadCart();
       })();
     </script>
   </body>
