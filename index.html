@@ -19,8 +19,59 @@
   </head>
   <body>
     <!-- =====================================================
+     INSTAGRAM VERIFICATION POPUP
+    ===================================================== -->
+    <div class="ig-modal-overlay" id="igModal">
+      <div class="ig-modal">
+        <div class="ig-modal-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="url(#ig-gradient)"/>
+            <path d="M34 24c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z" fill="#fff" opacity="0.9"/>
+            <circle cx="34.5" cy="13.5" r="2.5" fill="#fff"/>
+            <defs>
+              <linearGradient id="ig-gradient" x1="0" y1="0" x2="48" y2="48">
+                <stop stop-color="#F58529"/>
+                <stop offset="0.25" stop-color="#DD2A7B"/>
+                <stop offset="0.5" stop-color="#8134AF"/>
+                <stop offset="0.75" stop-color="#515BD4"/>
+                <stop offset="1" stop-color="#00CFFF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h3 class="ig-modal-title">Accès aux formations gratuites</h3>
+        <p class="ig-modal-desc">
+          Pour accéder à toutes les formations gratuites, suis d'abord
+          <strong>@activicode</strong> sur Instagram.
+        </p>
+        <div class="ig-modal-input-wrap">
+          <span class="ig-modal-at">@</span>
+          <input
+            type="text"
+            class="ig-modal-input"
+            id="igUsername"
+            placeholder="ton_pseudo_instagram"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <div class="ig-modal-error" id="igError">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <span id="igErrorMsg"></span>
+        </div>
+        <button class="btn btn-gold ig-modal-btn" id="igVerifyBtn" disabled>
+          <span id="igBtnText">Vérifier</span>
+          <span class="ig-spinner" id="igSpinner"></span>
+        </button>
+        <p class="ig-modal-footnote">
+          En validant, je confirme que je suis bien abonné à @activicode
+        </p>
+      </div>
+    </div>
+
+    <!-- =====================================================
      NAVBAR
-===================================================== -->
+    ===================================================== -->
     <header class="navbar" id="navbar" role="banner">
       <nav class="navbar-inner" aria-label="Navigation principale">
         <a href="#hero" class="nav-logo" aria-label="Pablo Corp – Accueil">
@@ -764,7 +815,7 @@
             <a
               href="#"
               class="btn btn-gold"
-              style="margin-top: 24px; width: 100%; justify-content: center"
+              style="margin-top: 24px; width: 40%; justify-content: center"
             >
               Accéder aux formations gratuites →
             </a>
@@ -1344,7 +1395,7 @@
     <!-- STICKY CTA -->
     <div class="sticky-cta" id="stickyCta">
       <a
-        href="#rhum"
+        href="https://t.me/+261342120803"
         class="btn btn-gold btn-telegram"
         style="box-shadow: 0 8px 32px rgba(201, 162, 39, 0.4)"
       >

@@ -1,3 +1,97 @@
+/* ---- Instagram Verification ---- */
+(function () {
+  const MODAL_KEY = "ig_verified";
+  const IG_USERNAME = "activicode";
+
+  if (localStorage.getItem(MODAL_KEY)) return;
+
+  const overlay = document.getElementById("igModal");
+  const input = document.getElementById("igUsername");
+  const btn = document.getElementById("igVerifyBtn");
+  const error = document.getElementById("igError");
+  const errorMsg = document.getElementById("igErrorMsg");
+  const wrap = document.querySelector(".ig-modal-input-wrap");
+
+  function validate(username) {
+    const clean = username.trim().replace(/^@/, "");
+    if (!clean) {
+      error.classList.remove("show");
+      wrap.classList.remove("valid");
+      btn.disabled = true;
+      return;
+    }
+    if (clean.length < 3) {
+      errorMsg.textContent = "Minimum 3 caractères";
+      error.classList.add("show");
+      wrap.classList.remove("valid");
+      btn.disabled = true;
+      return;
+    }
+    if (!/^[a-zA-Z0-9._]+$/.test(clean)) {
+      errorMsg.textContent = "Caractères non valides (lettres, chiffres, . et _ seulement)";
+      error.classList.add("show");
+      wrap.classList.remove("valid");
+      btn.disabled = true;
+      return;
+    }
+    error.classList.remove("show");
+    wrap.classList.add("valid");
+    btn.disabled = false;
+  }
+
+  input.addEventListener("input", function () {
+    validate(this.value);
+  });
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !btn.disabled) btn.click();
+  });
+
+  btn.addEventListener("click", async function () {
+    const username = input.value.trim().replace(/^@/, "");
+    if (!username || username.length < 3) return;
+
+    btn.classList.add("loading");
+    btn.disabled = true;
+    error.classList.remove("show");
+
+    try {
+      const res = await fetch("http://localhost:3002/api/verify-follow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+      const data = await res.json();
+
+      if (data.verified) {
+        localStorage.setItem(MODAL_KEY, "true");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      } else {
+        errorMsg.textContent = data.error || "Tu ne suis pas encore @activicode — abonne-toi et réessaie";
+        error.classList.add("show");
+        btn.classList.remove("loading");
+        btn.disabled = false;
+      }
+    } catch (err) {
+      errorMsg.textContent = "Serveur inaccessible. Vérifie que le serveur est lancé (npm start).";
+      error.classList.add("show");
+      btn.classList.remove("loading");
+      btn.disabled = false;
+    }
+  });
+
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) return;
+  });
+
+  setTimeout(() => {
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+    input.focus();
+  }, 400);
+})();
+
 /* ---- TradingView ---- */
 const TV_SYMBOLS = [
   { symbol: "FX:EURUSD" },
