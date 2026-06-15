@@ -11,44 +11,8 @@
     <link rel="stylesheet" href="src/css/video.css" />
     <link rel="stylesheet" href="src/css/style.css" />
     <style>
-      .page-hero {
-        min-height: 60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:140px 0 60px; position:relative; overflow:hidden;
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, black 100%), url("src/images/bg-2.png") center center / cover no-repeat;
-      }
-      .page-hero .hero-content { max-width:800px; }
-      .section-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:20px; margin-top:40px; }
-      .feature-block { text-align:center; padding:24px 16px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-md); }
-      .feature-num { font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--gold); }
-      .feature-label { font-size:13px; color:var(--muted); margin-top:6px; }
-      .video-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:24px; margin-top:50px; }
-      .video-card { background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-lg); overflow:hidden; cursor:pointer; transition:border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
-      .video-card:hover { border-color:var(--gold-dim); transform:translateY(-4px); box-shadow:0 12px 40px rgba(201,162,39,0.12); }
-      .video-thumb { position:relative; height:180px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-      .video-thumb .play-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); transition:background 0.3s; }
-      .video-thumb .play-overlay svg { width:56px; height:56px; opacity:0.9; transition:transform 0.3s, opacity 0.3s; }
-      .video-card:hover .play-overlay { background:rgba(0,0,0,0.1); }
-      .video-card:hover .play-overlay svg { transform:scale(1.15); opacity:1; }
-      .video-thumb .module-badge { position:absolute; top:14px; left:14px; }
-      .video-meta { padding:20px; }
-      .video-meta h3 { font-family:var(--font-display); font-size:20px; font-weight:600; color:var(--cream); margin-bottom:6px; }
-      .video-meta p { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:12px; }
-      .video-meta .row { display:flex; align-items:center; justify-content:space-between; font-size:13px; }
-      .video-meta .row .tag { display:inline-block; padding:2px 12px; border-radius:100px; background:rgba(201,162,39,0.1); color:var(--gold); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
-      .video-meta .row .duration { color:var(--muted); }
-      .theme-bg-1 { background:linear-gradient(145deg,#1a0e02,#0d0802); }
-      .theme-bg-2 { background:linear-gradient(145deg,#0a1e2a,#02090e); }
-      .theme-bg-3 { background:linear-gradient(145deg,#1a0520,#0d0010); }
-      .theme-bg-4 { background:linear-gradient(145deg,#0a2a0e,#020d04); }
-      .theme-bg-5 { background:linear-gradient(145deg,#2a0a0a,#0d0202); }
-      .theme-bg-6 { background:linear-gradient(145deg,#0a0a1e,#02020c); }
-      .about-instructor { display:grid; grid-template-columns:auto 1fr; gap:30px; align-items:center; padding:32px; background:var(--black-card); border:1px solid var(--black-border); border-radius:var(--r-lg); max-width:700px; margin:30px auto 0; }
-      .about-instructor .avatar { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,var(--gold-dim),var(--gold)); display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0; }
-      .about-instructor h4 { font-family:var(--font-display); font-size:20px; color:var(--cream); }
-      .about-instructor p { font-size:14px; color:var(--muted); margin-top:6px; line-height:1.6; }
       @media (max-width:768px) {
-        .video-grid { grid-template-columns:1fr; }
-        .about-instructor { grid-template-columns:1fr; text-align:center; }
-        .about-instructor .avatar { margin:0 auto; }
+        .modules-grid { grid-template-columns:1fr; }
       }
     </style>
   </head>
@@ -73,247 +37,123 @@
       </nav>
     </header>
 
-    <!-- HERO -->
-    <section class="page-hero">
-      <div class="hero-content">
-        <div class="hero-badge"><span class="hero-badge-dot"></span>100% Gratuit · Forex & Crypto</div>
-        <h1 class="display-xl" style="margin-bottom:8px">Trading<span class="hero-title-empire">Academy</span></h1>
-        <p class="body-lg" style="max-width:620px;margin:10px auto 0;font-size:clamp(16px,2vw,20px)">
-          De zéro à trader indépendant. Une formation complète, progressive et entièrement gratuite pour maîtriser les marchés financiers.
-        </p>
-        <div class="hero-cta" style="margin-top:30px;margin-bottom:20px">
-          <a href="#modules" class="btn btn-gold">Voir les modules ▼</a>
-          <a href="#pourquoi" class="btn btn-outline">Pourquoi cette formation ?</a>
-        </div>
-        <div class="section-features" style="margin-top:10px">
-          <div class="feature-block"><div class="feature-num">6</div><div class="feature-label">Modules complets</div></div>
-          <div class="feature-block"><div class="feature-num">12h+</div><div class="feature-label">De contenu vidéo</div></div>
-          <div class="feature-block"><div class="feature-num">∞</div><div class="feature-label">Accès à vie</div></div>
-          <div class="feature-block"><div class="feature-num">0 Ar</div><div class="feature-label">Entièrement gratuit</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- POURQUOI -->
-    <section class="section" id="pourquoi">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Pourquoi cette formation ?</p>
-          <h2 class="display-lg" style="margin-top:10px">Apprenez le trading, pas à pas</h2>
-          <p class="body-lg" style="max-width:600px;margin:14px auto 0">
-            Que vous partiez de zéro ou que vous ayez déjà quelques connaissances, les modules sont conçus pour vous emmener jusqu'à l'indépendance financière.
-          </p>
-          <span class="gold-rule"></span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:40px" data-reveal>
-          <div class="card" style="text-align:center;padding:32px 20px">
-            <div style="font-size:40px;margin-bottom:12px">📈</div>
-            <h3 class="heading" style="margin-bottom:8px;font-size:20px">Marchés Réels</h3>
-            <p class="body-md">Graphiques TradingView en direct, données réelles, pas de simulation.</p>
-          </div>
-          <div class="card" style="text-align:center;padding:32px 20px">
-            <div style="font-size:40px;margin-bottom:12px">🎯</div>
-            <h3 class="heading" style="margin-bottom:8px;font-size:20px">Stratégies Rentables</h3>
-            <p class="body-md">Scalping, swing, news trading — des stratégies qui marchent sur le long terme.</p>
-          </div>
-          <div class="card" style="text-align:center;padding:32px 20px">
-            <div style="font-size:40px;margin-bottom:12px">🧠</div>
-            <h3 class="heading" style="margin-bottom:8px;font-size:20px">Psychologie & Risque</h3>
-            <p class="body-md">Le money management et le contrôle émotionnel, clés de la réussite.</p>
-          </div>
-          <div class="card" style="text-align:center;padding:32px 20px">
-            <div style="font-size:40px;margin-bottom:12px">💼</div>
-            <h3 class="heading" style="margin-bottom:8px;font-size:20px">Revenus Multiples</h3>
-            <p class="body-md">Trading, freelance, affiliation — construisez plusieurs sources de revenus.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <!-- GRAPHIQUES -->
-    <section class="section" style="padding-bottom:20px">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Marchés en Direct</p>
-          <h2 class="display-lg" style="margin-top:10px">Analyse en temps réel</h2>
-          <span class="gold-rule"></span>
-        </div>
-        <div data-reveal>
-          <div class="tab-row">
-            <button onclick="switchSymbol(0)" class="tab-btn active">EUR/USD</button>
-            <button onclick="switchSymbol(1)" class="tab-btn">GBP/USD</button>
-            <button onclick="switchSymbol(2)" class="tab-btn">XAU/USD (Gold)</button>
-          </div>
-          <div class="tv-wrap">
-            <div id="tradingview-widget" style="height:520px;width:100%"></div>
-          </div>
-          <p class="tv-note">Données en direct • TradingView • Mise à jour automatique</p>
-        </div>
-      </div>
-    </section>
-
-    <hr class="section-divider" />
+    <div style="height:80px"></div>
 
     <!-- MODULES -->
     <section class="section" id="modules">
       <div class="container">
-        <div class="section-header" data-reveal>
+        <div class="section-header revealed" data-reveal>
           <p class="eyebrow">Programme complet</p>
           <h2 class="display-lg" style="margin-top:10px">Les 6 modules de formation</h2>
           <p class="body-lg" style="max-width:560px;margin:14px auto 0">
-            Cliquez sur une vidéo pour la lancer. Chaque module contient plusieurs leçons.
+            Cliquez sur un module pour commencer. Chaque module contient plusieurs leçons vidéo.
           </p>
           <span class="gold-rule"></span>
         </div>
 
-        <div class="video-grid" data-reveal>
-          <!-- 1 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-1">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 1</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">01</div>
+        <div class="modules-grid" style="margin-top: 50px">
+          <div class="card card-hover revealed" data-reveal="" data-delay="1">
+            <div class="module-num">01</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Les Fondamentaux
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Marchés financiers, ordres, bougies japonaises, paires Forex —
+              tout comprendre en partant de zéro.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">6 leçons · 1h 35min</span>
             </div>
-            <div class="video-meta">
-              <h3>Les Fondamentaux</h3>
-              <p>Marchés financiers, types d'ordres, bougies japonaises, paires Forex, spreads et leverage. Les bases solides pour bien démarrer.</p>
-              <div class="row">
-                <span class="tag">Débutant</span>
-                <span class="duration">6 leçons · 1h 35min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-          <!-- 2 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-2">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 2</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">02</div>
+          <div class="card card-hover revealed" data-reveal="" data-delay="2">
+            <div class="module-num">02</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Analyse Technique
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Supports, résistances, RSI, MACD, moyennes mobiles, patterns de
+              chandeliers et multi-timeframes.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">5 leçons · 2h 18min</span>
             </div>
-            <div class="video-meta">
-              <h3>Analyse Technique</h3>
-              <p>Supports et résistances, RSI, MACD, moyennes mobiles, patterns de chandeliers, multi-timeframes et zones de liquidité.</p>
-              <div class="row">
-                <span class="tag">Débutant+</span>
-                <span class="duration">5 leçons · 2h 18min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-          <!-- 3 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-3">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 3</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">03</div>
+          <div class="card card-hover revealed" data-reveal="" data-delay="3">
+            <div class="module-num">03</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Risque &amp; Psychologie
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Money management, calcul de position, contrôle émotionnel, journal
+              de trading et analyse de performance.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">5 leçons · 1h 52min</span>
             </div>
-            <div class="video-meta">
-              <h3>Risque & Psychologie</h3>
-              <p>Money management, calcul de position, ratio risque/récompense, contrôle émotionnel, journal de trading et analyse de performance.</p>
-              <div class="row">
-                <span class="tag">Intermédiaire</span>
-                <span class="duration">5 leçons · 1h 52min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-          <!-- 4 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-4">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 4</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">04</div>
+          <div class="card card-hover revealed" data-reveal="" data-delay="1">
+            <div class="module-num">04</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Stratégies Avancées
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Scalping, swing trading, news trading, cryptomonnaies et
+              initiation aux bots automatiques.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">5 leçons · 1h 28min</span>
             </div>
-            <div class="video-meta">
-              <h3>Stratégies Avancées</h3>
-              <p>Scalping, swing trading, news trading, cryptomonnaies, arbitrage et initiation aux bots de trading automatiques.</p>
-              <div class="row">
-                <span class="tag">Avancé</span>
-                <span class="duration">5 leçons · 1h 28min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-          <!-- 5 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-5">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 5</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">05</div>
+          <div class="card card-hover revealed" data-reveal="" data-delay="2">
+            <div class="module-num">05</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Revenus Alternatifs
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Freelance, création de formations, affiliation, réseaux sociaux —
+              construire plusieurs sources de revenus.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">4 leçons · 3h 45min</span>
             </div>
-            <div class="video-meta">
-              <h3>Revenus Alternatifs</h3>
-              <p>Freelance, création de formations en ligne, marketing d'affiliation, monétisation de réseaux sociaux et revenus passifs.</p>
-              <div class="row">
-                <span class="tag">Avancé</span>
-                <span class="duration">4 leçons · 3h 45min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-          <!-- 6 -->
-          <div class="video-card openVideo" data-video="src/videos/presentation.mp4">
-            <div class="video-thumb theme-bg-6">
-              <span class="module-tag module-free" style="position:absolute;top:14px;left:14px;margin:0">Module 6</span>
-              <div class="play-overlay">
-                <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-              <div style="font-size:52px;opacity:0.3;font-weight:900;font-family:var(--font-display);color:var(--gold)">06</div>
+          <div class="card card-hover revealed" data-reveal="" data-delay="3">
+            <div class="module-num">06</div>
+            <span class="module-tag module-free">Gratuit</span>
+            <h3 class="heading" style="margin-bottom: 10px">
+              Indépendance Financière
+            </h3>
+            <p class="body-md" style="margin-bottom: 16px">
+              Compte réel, fiscalité, prop firms, routine quotidienne du trader
+              indépendant.
+            </p>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="font-size: 12px; color: var(--muted)">4 leçons · 1h 15min</span>
             </div>
-            <div class="video-meta">
-              <h3>Indépendance Financière</h3>
-              <p>Compte réel, fiscalité du trader, prop firms, routine quotidienne, gestion de portefeuille et objectifs à long terme.</p>
-              <div class="row">
-                <span class="tag">Expert</span>
-                <span class="duration">4 leçons · 1h 15min</span>
-              </div>
-            </div>
+            <button class="btn btn-outline openVideo" style="font-size: 13px; padding: 10px 20px" data-video="src/videos/presentation.mp4">
+              ▶ Commencer
+            </button>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <!-- FORMATEUR -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header" data-reveal>
-          <p class="eyebrow">Qui sommes-nous ?</p>
-          <h2 class="display-lg" style="margin-top:10px">L'équipe Pablo Corp</h2>
-          <span class="gold-rule"></span>
-        </div>
-        <div class="about-instructor" data-reveal>
-          <div class="avatar">👨‍🏫</div>
-          <div>
-            <h4>Pablo Corp Academy</h4>
-            <p>Formateur passionné basé à Madagascar avec plusieurs années d'expérience sur les marchés Forex et crypto. La mission : rendre le trading accessible à tous, gratuitement, sans bullshit.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <!-- CTA -->
-    <section class="section">
-      <div class="container">
-        <div class="donation-inner" data-reveal>
-          <p class="eyebrow">Prêt à commencer ?</p>
-          <h2 class="display-lg" style="margin-top:10px;margin-bottom:16px">Rejoignez la formation</h2>
-          <p class="body-lg" style="max-width:520px;margin:0 auto 24px">
-            Tous les modules sont gratuits. Aucune inscription requise. Lancez-vous maintenant.
-          </p>
-          <a href="#modules" class="btn btn-gold">Commencer le Module 1 ▶</a>
-          <p style="margin-top:16px;font-size:13px;color:var(--muted)">🔓 Déjà +200 étudiants formés</p>
         </div>
       </div>
     </section>
@@ -376,7 +216,6 @@
     </div>
 
     <!-- SCRIPTS -->
-    <script src="https://s3.tradingview.com/tv.js"></script>
     <script src="src/scripts/main.js"></script>
     <script>
       (function(){
