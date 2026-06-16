@@ -1,5 +1,6 @@
 /* ---- Instagram Verification ---- */
 (function () {
+  return; // DÉSACTIVÉ temporairement
   const MODAL_KEY = "ig_verified";
   const IG_USERNAME = "activicode";
 
