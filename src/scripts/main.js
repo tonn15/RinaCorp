@@ -129,22 +129,143 @@ function switchSymbol(i) {
 }
 window.addEventListener("load", () => createTradingViewWidget(0));
 
-/* ---- Particles ---- */
+/* ---- Trading Widget Animation ---- */
 (function () {
-  const container = document.getElementById("particles");
-  for (let i = 0; i < 60; i++) {
-    const p = document.createElement("span");
-    p.className = "particle";
-    p.style.cssText = `
-      left:${Math.random() * 100}%;
-      width:${1 + Math.random() * 2}px;
-      height:${1 + Math.random() * 2}px;
-      animation-duration:${6 + Math.random() * 12}s;
-      animation-delay:${-Math.random() * 12}s;
-      opacity:${0.2 + Math.random() * 0.5}
+  const widgets = document.querySelectorAll(".trade-widget");
+  if (!widgets.length) return;
+  widgets.forEach((w) => {
+    const pair = w.dataset.pair;
+    const basePrice = parseFloat(w.dataset.price);
+    const change = parseFloat(w.dataset.change);
+    const isUp = change >= 0;
+
+    const header = document.createElement("div");
+    header.className = "trade-widget-header";
+    header.innerHTML = `
+      <span class="trade-widget-pair">${pair}</span>
+      <span class="trade-widget-change ${isUp ? "up" : "down"}">${change > 0 ? "+" : ""}${change}%</span>
     `;
-    container.appendChild(p);
-  }
+    const priceEl = document.createElement("div");
+    priceEl.className = `trade-widget-price ${isUp ? "up" : "down"}`;
+    priceEl.textContent = basePrice.toLocaleString("fr", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const chartWrap = document.createElement("div");
+    chartWrap.className = "trade-widget-chart";
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("class", "trade-chart-svg");
+    svg.setAttribute("viewBox", "0 0 240 80");
+    svg.setAttribute("preserveAspectRatio", "none");
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("class", `trade-chart-path ${isUp ? "up" : "down"}`);
+    const fill = document.createElementNS(svgNS, "path");
+    fill.setAttribute("class", `trade-chart-fill ${isUp ? "up" : "down"}`);
+    svg.appendChild(path);
+    svg.appendChild(fill);
+    chartWrap.appendChild(svg);
+    w.appendChild(header);
+    w.appendChild(priceEl);
+    w.appendChild(chartWrap);
+
+    let price = basePrice;
+    const points = 60;
+    let data = [];
+    for (let i = 0; i < points; i++) {
+      data.push(basePrice * (1 + (Math.random() - 0.5) * 0.04));
+    }
+    function buildPath(arr) {
+      const w2 = 240, h2 = 80;
+      const min = Math.min(...arr), max = Math.max(...arr);
+      const range = max - min || 1;
+      let d = "", fd = "";
+      arr.forEach((v, i) => {
+        const x = (i / (arr.length - 1)) * w2;
+        const y = h2 - ((v - min) / range) * (h2 - 10) - 5;
+        d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
+        fd += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
+      });
+      fd += "L" + w2 + " " + h2 + " L0 " + h2 + " Z";
+      return { line: d, fill: fd };
+    }
+    function updateChart() {
+      const p = buildPath(data);
+      path.setAttribute("d", p.line);
+      fill.setAttribute("d", p.fill);
+    }
+    updateChart();
+    let animFrame;
+    let dir = isUp ? 1 : -1;
+    function tick() {
+      const drift = basePrice * 0.0002 * dir;
+      const noise = basePrice * (Math.random() - 0.5) * 0.002;
+      price += drift + noise;
+      if (Math.random() < 0.03) dir *= -1;
+      data.push(price);
+      data.shift();
+      priceEl.textContent = price.toLocaleString("fr", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const newChange = ((price - basePrice) / basePrice * 100);
+      const chEl = w.querySelector(".trade-widget-change");
+      if (chEl) {
+        chEl.textContent = (newChange > 0 ? "+" : "") + newChange.toFixed(2) + "%";
+        chEl.className = `trade-widget-change ${newChange >= 0 ? "up" : "down"}`;
+      }
+      priceEl.className = `trade-widget-price ${newChange >= 0 ? "up" : "down"}`;
+      updateChart();
+      animFrame = setTimeout(tick, 800 + Math.random() * 600);
+    }
+    tick();
+  });
+})();
+
+/* ---- Hero Slider (Owl Carousel) ---- */
+(function () {
+  const slider = document.getElementById("heroSlider");
+  if (!slider || typeof $ === "undefined") return;
+  $(slider).owlCarousel({
+    items: 1,
+    loop: true,
+    autoplay: true,
+    autoplayTimeout: 7000,
+    autoplayHoverPause: true,
+    dots: true,
+    nav: false,
+    smartSpeed: 800,
+  });
+})();
+
+/* ---- Candlestick Chart Animation (ascending / descending) ---- */
+(function () {
+  const charts = document.querySelectorAll(".candle-chart");
+  if (!charts.length) return;
+  charts.forEach((container, slideIdx) => {
+    const count = 25 + slideIdx * 8;
+    const isBullishSlide = slideIdx === 0;
+    for (let i = 0; i < count; i++) {
+      const isAsc = isBullishSlide ? Math.random() > 0.3 : Math.random() > 0.5;
+      const isGreen = isAsc ? Math.random() > 0.25 : Math.random() < 0.25;
+      const candle = document.createElement("div");
+      candle.className = `candle ${isAsc ? "candle-asc" : "candle-desc"} ${isGreen ? "candle-bullish" : "candle-bearish"}`;
+      const wick = document.createElement("div");
+      wick.className = `candle-wick ${isAsc ? "candle-asc" : "candle-desc"}`;
+      const left = 2 + Math.random() * 88;
+      const delay = Math.random() * 6;
+      const dur = 3 + Math.random() * 4;
+      const width = 6 + Math.random() * 14;
+      candle.style.cssText = `
+        left:${left}%;
+        width:${width}px;
+        animation-delay:${delay}s;
+        animation-duration:${dur}s;
+      `;
+      wick.style.cssText = `
+        left:${left}%;
+        width:2px;
+        animation-delay:${delay}s;
+        animation-duration:${dur}s;
+      `;
+      container.appendChild(candle);
+      container.appendChild(wick);
+    }
+  });
 })();
 
 /* ---- Navbar scroll ---- */
@@ -177,6 +298,15 @@ links.querySelectorAll("a").forEach((a) =>
     document.body.style.overflow = "";
   }),
 );
+const navClose = document.getElementById("navClose");
+if (navClose) {
+  navClose.addEventListener("click", () => {
+    links.classList.remove("open");
+    actions.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  });
+}
 
 /* ---- Cart toast ---- */
 let cart = {};
