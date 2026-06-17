@@ -313,6 +313,8 @@ button {
   background: url('../images/bg.png') center/cover no-repeat;
 }
 .hero .owl-carousel {
+  position: relative;
+  z-index: 5;
   overflow: hidden;
 }
 .hero-item {
@@ -338,9 +340,11 @@ button {
 }
 .hero-item .container {
   position: relative;
-  z-index: 3;
+  z-index: 100;
 }
 .hero-text {
+  position: relative;
+  z-index: 999;
   max-width: 620px;
   padding: 40px 0;
 }
@@ -377,6 +381,9 @@ button {
   line-height: 1.7;
   margin-bottom: 32px;
   max-width: 520px;
+  background: #000000c9;
+  padding: 10px;
+  box-shadow: 1px 1px 5px -1px;
 }
 .hero-text .btn-gold {
   display: inline-flex;

@@ -216,6 +216,54 @@ window.addEventListener("load", () => createTradingViewWidget(0));
   });
 })();
 
+/* ---- Hero Chart Background Animation ---- */
+(function () {
+  const bgSvg = document.querySelector(".hero-chart-bg .trade-chart-svg");
+  if (!bgSvg) return;
+  const path = bgSvg.querySelector(".trade-chart-path");
+  const fill = bgSvg.querySelector(".trade-chart-fill");
+  if (!path || !fill) return;
+  const points = 60;
+  const basePrice = 1.08;
+  let data = [];
+  for (let i = 0; i < points; i++) {
+    data.push(basePrice * (1 + (Math.random() - 0.5) * 0.04));
+  }
+  function buildPath(arr) {
+    const w2 = 240, h2 = 80;
+    const min = Math.min(...arr), max = Math.max(...arr);
+    const range = max - min || 1;
+    let d = "", fd = "";
+    arr.forEach((v, i) => {
+      const x = (i / (arr.length - 1)) * w2;
+      const y = h2 - ((v - min) / range) * (h2 - 10) - 5;
+      d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
+      fd += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
+    });
+    fd += "L" + w2 + " " + h2 + " L0 " + h2 + " Z";
+    return { line: d, fill: fd };
+  }
+  function updateChart() {
+    const p = buildPath(data);
+    path.setAttribute("d", p.line);
+    fill.setAttribute("d", p.fill);
+  }
+  updateChart();
+  let price = basePrice;
+  let dir = 1;
+  function tick() {
+    const drift = basePrice * 0.0002 * dir;
+    const noise = basePrice * (Math.random() - 0.5) * 0.002;
+    price += drift + noise;
+    if (Math.random() < 0.03) dir *= -1;
+    data.push(price);
+    data.shift();
+    updateChart();
+    setTimeout(tick, 800 + Math.random() * 600);
+  }
+  tick();
+})();
+
 /* ---- Hero Slider (Owl Carousel) ---- */
 (function () {
   const slider = document.getElementById("heroSlider");
