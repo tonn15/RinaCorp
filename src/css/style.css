@@ -1588,6 +1588,11 @@ footer {
     width: auto;
     transform: none;
     transition: opacity 0.3s;
+    z-index: 300;
+  }
+  .cart-summary.visible {
+    transform: none;
+    pointer-events: auto;
   }
   .cart-summary .cart-card {
     width: 100%;
