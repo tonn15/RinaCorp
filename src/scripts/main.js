@@ -352,32 +352,7 @@ window.addEventListener(
   { passive: true },
 );
 
-/* ---- Mobile nav ---- */
-const toggle = document.getElementById("navToggle");
-const links = document.getElementById("navLinks");
-const actions = document.getElementById("navActions");
-toggle.addEventListener("click", () => {
-  const open = links.classList.toggle("open");
-  actions.classList.toggle("open", open);
-  toggle.setAttribute("aria-expanded", open);
-  document.body.style.overflow = open ? "hidden" : "";
-});
-links.querySelectorAll("a").forEach((a) =>
-  a.addEventListener("click", () => {
-    links.classList.remove("open");
-    actions.classList.remove("open");
-    document.body.style.overflow = "";
-  }),
-);
-const navClose = document.getElementById("navClose");
-if (navClose) {
-  navClose.addEventListener("click", () => {
-    links.classList.remove("open");
-    actions.classList.remove("open");
-    toggle.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "";
-  });
-}
+/* ---- Mobile nav (deprecated: burger removed) ---- */
 
 /* ---- Cart toast ---- */
 let cart = {};

@@ -273,6 +273,24 @@ button {
   align-items: center;
   gap: 12px;
 }
+.nav-icons {
+  display: none;
+  align-items: center;
+  gap: 2px;
+}
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: var(--muted);
+  transition: color 0.2s;
+  border-radius: 50%;
+}
+.nav-icon:hover {
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.1);
+}
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -397,9 +415,11 @@ button {
   line-height: 1.7;
   margin-bottom: 32px;
   max-width: 520px;
-  background: #000000c9;
-  padding: 10px;
-  box-shadow: 1px 1px 5px -1px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 10px 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 .hero-text .btn-gold {
   display: inline-flex;
@@ -1467,6 +1487,7 @@ footer {
   }
   .hero-text {
     text-align: center;
+    margin: 0 auto;
     padding: 20px 0;
   }
   .hero-text h2 {
@@ -1493,49 +1514,89 @@ footer {
   .hero .owl-dots {
     bottom: 16px;
   }
-  .nav-links,
+  .nav-links {
+    display: none;
+  }
+  .navbar {
+    padding: 6px 0 4px;
+    background: rgba(3, 3, 2, 0.92);
+    backdrop-filter: blur(12px);
+  }
+  .navbar-inner {
+    padding: 0 12px;
+    gap: 2px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-logo {
+    flex: 0 0 100%;
+    text-align: center;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+  }
+  .nav-logo img {
+    width: 100px;
+  }
+  .nav-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    flex: 0 0 100%;
+  }
+  .nav-icon {
+    padding: 6px;
+    color: var(--muted);
+  }
   .nav-actions {
     display: none;
   }
-  .nav-links.open {
-    display: flex;
+  .donation-methods {
     flex-direction: column;
+    align-items: stretch;
+  }
+  .donation-methods .method-badge {
+    width: 100%;
+  }
+  .donation-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .rhum-badge-row {
+    justify-content: center;
+  }
+  .rhum-stats {
+    justify-content: center;
+  }
+  .rhum-cta-btn {
+    width: 100%;
+  }
+  .cart-summary {
     position: fixed;
     inset: 0;
-    background: rgba(3, 3, 2, 0.98);
-    padding: 100px 30px;
-    gap: 28px;
-    z-index: 190;
-    font-size: 20px;
-  }
-  .nav-links.open a {
-    font-size: 22px;
-  }
-  .nav-links.open .nav-close {
     display: flex;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 36px;
-    color: var(--cream-dim);
-    cursor: pointer;
-    padding: 8px 12px;
-    line-height: 1;
-    z-index: 10;
-  }
-  .nav-actions.open {
-    display: flex;
-    position: fixed;
-    bottom: 40px;
-    left: 0;
-    right: 0;
+    align-items: center;
     justify-content: center;
-    z-index: 191;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    border-radius: 0;
+    padding: 20px;
+    min-width: 0;
+    width: auto;
+    transform: none;
+    transition: opacity 0.3s;
   }
-  .nav-toggle {
-    display: flex;
+  .cart-summary .cart-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--black-card);
+    border: 1px solid var(--gold-dim);
+    border-radius: var(--r-md);
+    padding: 16px 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   }
   .modules-grid {
     grid-template-columns: 1fr;
@@ -1617,6 +1678,18 @@ footer {
   .hero-subtitle {
     font-size: 15px;
     margin: 16px auto 30px;
+  }
+  .rhum-stats {
+    gap: 8px !important;
+  }
+  .rhum-stats > div:nth-child(odd) > div:first-child {
+    font-size: 24px !important;
+  }
+  .rhum-stats > div:nth-child(odd) > div:last-child {
+    font-size: 11px !important;
+  }
+  .rhum-cta-btn {
+    width: 100%;
   }
   .hero-cta {
     flex-direction: column;
@@ -1729,12 +1802,6 @@ footer {
   .btn-telegram svg {
     width: 28px;
     height: 28px;
-  }
-  .cart-summary {
-    right: 12px;
-    left: 12px;
-    min-width: 0;
-    width: auto;
   }
   .ig-modal {
     padding: 32px 20px 28px;
