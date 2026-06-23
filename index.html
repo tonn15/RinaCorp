@@ -208,6 +208,84 @@
     </div>
 
     <!-- =====================================================
+     PLATFORM CHOICE POPUP
+    ===================================================== -->
+    <div class="ig-modal-overlay" id="choiceModal">
+      <div class="ig-modal">
+        <h3 class="ig-modal-title">Vérification</h3>
+        <p class="ig-modal-desc">
+          Choisis la plateforme sur laquelle tu suis
+          <strong>@activicode</strong>
+        </p>
+        <div class="choice-btns">
+          <button class="btn btn-gold choice-btn" id="choiceIG">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+            Instagram
+          </button>
+          <button class="btn btn-gold choice-btn" id="choiceTT">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v8a5 5 0 01-5 5H8a5 5 0 01-5-5V8a5 5 0 015-5h8a5 5 0 015 5z"/><path d="M17 8.5a3 3 0 01-3-3" stroke-linecap="round"/><path d="M10 17a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/><path d="M17.5 5.5v.5"/></svg>
+            TikTok
+          </button>
+        </div>
+        <p class="ig-modal-footnote">
+          Choisis le réseau sur lequel tu suis déjà @activicode
+        </p>
+      </div>
+    </div>
+
+    <!-- =====================================================
+     TIKTOK VERIFICATION POPUP
+    ===================================================== -->
+    <div class="ig-modal-overlay" id="ttModal">
+      <div class="ig-modal">
+        <div class="ig-modal-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="#010101"/>
+            <path d="M34.5 15.5c-2.8 0-5-2.2-5-5h-4v18.5c0 2.8-2.2 5-5 5s-5-2.2-5-5 2.2-5 5-5v-4c-5 0-9 4-9 9s4 9 9 9 9-4 9-9V19c1.1.7 2.5 1.2 4 1.2v-4.7z" fill="#fff"/>
+          </svg>
+        </div>
+        <h3 class="ig-modal-title">Accès aux formations gratuites</h3>
+        <p class="ig-modal-desc">
+          Pour accéder à toutes les formations gratuites, suis d'abord
+          <strong>@activicode</strong> sur TikTok.
+        </p>
+        <div class="ig-modal-input-wrap">
+          <span class="ig-modal-at">@</span>
+          <input
+            type="text"
+            class="ig-modal-input"
+            id="ttUsername"
+            placeholder="ton_pseudo_tiktok"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+        <div class="ig-modal-error" id="ttError">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+          <span id="ttErrorMsg"></span>
+        </div>
+        <button class="btn btn-gold ig-modal-btn" id="ttVerifyBtn" disabled>
+          <span id="ttBtnText">Vérifier</span>
+          <span class="ig-spinner" id="ttSpinner"></span>
+        </button>
+        <p class="ig-modal-footnote">
+          En validant, je confirme que je suis bien abonné à @activicode sur TikTok
+        </p>
+      </div>
+    </div>
+
+    <!-- =====================================================
      NAVBAR
     ===================================================== -->
     <header class="navbar" id="navbar" role="banner">

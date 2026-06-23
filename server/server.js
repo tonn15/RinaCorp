@@ -16,6 +16,9 @@ const IG_BOT_PASSWORD = process.env.IG_BOT_PASSWORD;
 const IG_TARGET = process.env.IG_TARGET_USERNAME || "activicode";
 const IG_SESSIONID = process.env.IG_SESSIONID;
 
+const TT_SESSIONID = process.env.TT_SESSIONID;
+const TT_TARGET = process.env.TT_TARGET_USERNAME || "activicode";
+
 let browser;
 
 async function getBrowser() {
@@ -23,7 +26,14 @@ async function getBrowser() {
     browser = await puppeteer.launch({
       headless: true,
       executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--window-size=1280,800"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--window-size=1280,800",
+        "--no-proxy-server",
+        "--disable-blink-features=AutomationControlled",
+        "--disable-dev-shm-usage",
+      ],
     });
   }
   return browser;
@@ -272,7 +282,221 @@ app.post("/api/verify-follow", async (req, res) => {
   }
 });
 
+/* ==========================================
+   TIKTOK VERIFICATION
+   ========================================== */
+
+let cachedTTTarget = null;
+
+async function createTTSession() {
+  console.log("  → Creating TikTok session...");
+  const b = await getBrowser();
+  const page = await b.newPage();
+  await page.setViewport({ width: 1280, height: 800 });
+  await page.setUserAgent(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+  );
+
+  await page.goto("https://www.tiktok.com/", {
+    waitUntil: "domcontentloaded",
+    timeout: 60000,
+  });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  await page.setCookie({
+    name: "sessionid",
+    value: TT_SESSIONID,
+    domain: ".tiktok.com",
+    path: "/",
+    httpOnly: true,
+    secure: true,
+  });
+
+  await page.reload({ waitUntil: "domcontentloaded", timeout: 60000 });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  const hasSession = (await page.cookies()).some((c) => c.name === "sessionid");
+  if (!hasSession) {
+    await page.screenshot({ path: "debug_tt_cookie_fail.png" });
+    await page.close();
+    throw new Error("Session TikTok invalide — mets à jour TT_SESSIONID dans .env");
+  }
+
+  console.log("  ✓ TikTok session OK (cookie)");
+  return page;
+}
+
+async function getTTUserInfo(page, targetUsername) {
+  if (cachedTTTarget?.uniqueId === targetUsername) {
+    console.log("  ✓ @" + targetUsername + " secUid (cache): " + cachedTTTarget.secUid.slice(0, 16) + "...");
+    return cachedTTTarget;
+  }
+
+  console.log("  → Getting TikTok user info for @" + targetUsername);
+
+  // Intercepter la réponse API que le frontend TikTok appelle
+  const apiPromise = new Promise((resolve) => {
+    const handler = async (response) => {
+      if (response.url().includes('/api/user/detail/')) {
+        try {
+          const data = await response.json();
+          const user = data?.user || data;
+          if (user?.secUid) {
+            page.off('response', handler);
+            resolve(user);
+          }
+        } catch (e) {}
+      }
+    };
+    page.on('response', handler);
+    setTimeout(() => { page.off('response', handler); resolve(null); }, 20000);
+  });
+
+  await page.goto(`https://www.tiktok.com/@${targetUsername}`, {
+    waitUntil: "networkidle2",
+    timeout: 60000,
+  });
+
+  let userInfo = await apiPromise;
+
+  if (!userInfo) {
+    console.log("  → Fallback: extraction HTML...");
+    await new Promise((r) => setTimeout(r, 3000));
+    userInfo = await page.evaluate(() => {
+      const html = document.documentElement.innerHTML;
+      const secUidMatch = html.match(/"secUid"\s*:\s*"([^"]{20,})"/);
+      const uniqueIdMatch = html.match(/"uniqueId"\s*:\s*"([^"]+)"/);
+      if (secUidMatch) {
+        return { secUid: secUidMatch[1], uniqueId: uniqueIdMatch ? uniqueIdMatch[1] : "" };
+      }
+      return null;
+    });
+  }
+
+  if (userInfo?.secUid) {
+    cachedTTTarget = { ...userInfo, uniqueId: targetUsername };
+    console.log("  ✓ @" + targetUsername + " secUid: " + userInfo.secUid.slice(0, 16) + "...");
+    return userInfo;
+  }
+
+  await page.screenshot({ path: "debug_tt_profile.png" });
+  return null;
+}
+
+async function checkTTFollowers(page, secUid, followerName) {
+  console.log("  → Checking via @" + followerName + " following list...");
+
+  await page.goto(`https://www.tiktok.com/@${followerName}`, {
+    waitUntil: "domcontentloaded",
+    timeout: 60000,
+  });
+
+  await page.waitForFunction(
+    () => document.documentElement.innerHTML.includes('"secUid"'),
+    { timeout: 15000 }
+  ).catch(() => {});
+  await new Promise((r) => setTimeout(r, 3000));
+
+  let found = false;
+  let totalChecked = 0;
+
+  const responseHandler = async (response) => {
+    if (response.url().includes('/api/user/list/')) {
+      try {
+        const data = await response.json();
+        const list = data?.userList || [];
+        totalChecked += list.length;
+        console.log("  [DEBUG] Batch following:", list.length, "(total:", totalChecked + ")");
+        for (const u of list) {
+          const uid = u.uniqueId?.toLowerCase() || u.user?.uniqueId?.toLowerCase();
+          if (uid === TT_TARGET.toLowerCase()) found = true;
+        }
+      } catch (e) {}
+    }
+  };
+
+  page.on("response", responseHandler);
+
+  const opened = await page.evaluate(() => {
+    for (const sel of [
+      '[data-e2e="following-count"]',
+      'strong[title*="Following"]',
+    ]) {
+      const el = document.querySelector(sel);
+      if (el) { el.click(); return true; }
+    }
+    for (const el of document.querySelectorAll("strong, span, div, a")) {
+      const t = el.textContent.trim();
+      if (/^\d[\d.,]*[KMB]?\s*Following/i.test(t)) {
+        el.click(); return true;
+      }
+    }
+    return false;
+  });
+
+  console.log("  [DEBUG] Modal following ouverte:", opened);
+  await new Promise((r) => setTimeout(r, 3000));
+
+  for (let i = 0; i < 100 && !found; i++) {
+    await page.evaluate(() => {
+      const selectors = [
+        '[role="dialog"]',
+        '[class*="DivFollowContainer"]',
+        '[class*="following-list"]',
+        '[class*="RelationList"]',
+      ];
+      for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el && el.scrollHeight > el.clientHeight) {
+          el.scrollTop += 600;
+          return;
+        }
+      }
+      window.scrollBy(0, 600);
+    });
+    await new Promise((r) => setTimeout(r, 800));
+  }
+
+  page.off("response", responseHandler);
+  console.log("  [DEBUG] Total following vérifiés:", totalChecked);
+  return found;
+}
+
+async function checkTTFollow(username) {
+  console.log("  → Creating TikTok session...");
+  const page = await createTTSession();
+
+  try {
+    const cleanUser = username.trim().replace(/^@/, "").toLowerCase();
+    const userInfo = await getTTUserInfo(page, TT_TARGET);
+    if (!userInfo) return { verified: false, error: "@" + TT_TARGET + " introuvable sur TikTok" };
+
+    const found = await checkTTFollowers(page, userInfo.secUid, cleanUser);
+    console.log(found ? "  ✓ @" + cleanUser + " trouvé sur TikTok" : "  ✗ @" + cleanUser + " pas trouvé sur TikTok");
+    return { verified: found, username: cleanUser };
+  } finally {
+    await page.close();
+  }
+}
+
+app.post("/api/verify-tt-follow", async (req, res) => {
+  const { username } = req.body;
+  console.log("\n=== TikTok Verify @" + (username || "?") + " ===");
+  if (!username || username.trim().length < 3) {
+    return res.json({ verified: false, error: "Username invalide" });
+  }
+  try {
+    const result = await checkTTFollow(username);
+    console.log("  ✓ Done:", JSON.stringify(result));
+    res.json(result);
+  } catch (err) {
+    console.error("  ✗ Error:", err.message);
+    res.json({ verified: false, error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log("✓ IG Verify server on http://localhost:" + PORT);
   console.log("✓ Checking follows for @" + IG_TARGET);
+  console.log("✓ Checking TikTok follows for @" + TT_TARGET);
 });

@@ -1044,6 +1044,33 @@ button {
 @keyframes ig-spin {
   to { transform: rotate(360deg); }
 }
+
+.choice-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+.choice-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s;
+}
+.choice-btn svg {
+  flex-shrink: 0;
+}
+.choice-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(201, 162, 39, 0.25);
+}
 .donation-inner {
   max-width: 720px;
   margin: 0 auto;

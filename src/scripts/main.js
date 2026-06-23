@@ -1,20 +1,36 @@
-/* ---- Instagram Verification ---- */
+/* ---- Platform Verification (Instagram / TikTok) ---- */
 (function () {
-  return; // DÉSACTIVÉ temporairement
-  const MODAL_KEY = "ig_verified";
-  const IG_USERNAME = "activicode";
-
+  const MODAL_KEY = "verified";
   if (localStorage.getItem(MODAL_KEY)) return;
 
-  const overlay = document.getElementById("igModal");
-  const input = document.getElementById("igUsername");
-  const btn = document.getElementById("igVerifyBtn");
-  const error = document.getElementById("igError");
-  const errorMsg = document.getElementById("igErrorMsg");
-  const wrap = document.querySelector(".ig-modal-input-wrap");
+  const choiceOverlay = document.getElementById("choiceModal");
+  const igOverlay = document.getElementById("igModal");
+  const ttOverlay = document.getElementById("ttModal");
+  if (!choiceOverlay) return;
 
-  function validate(username) {
-    const clean = username.trim().replace(/^@/, "");
+  function showOverlay(el) {
+    el.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+  function hideOverlay(el) {
+    el.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  setTimeout(() => showOverlay(choiceOverlay), 400);
+
+  document.getElementById("choiceIG").addEventListener("click", () => {
+    hideOverlay(choiceOverlay);
+    setTimeout(() => { showOverlay(igOverlay); document.getElementById("igUsername").focus(); }, 350);
+  });
+
+  document.getElementById("choiceTT").addEventListener("click", () => {
+    hideOverlay(choiceOverlay);
+    setTimeout(() => { showOverlay(ttOverlay); document.getElementById("ttUsername").focus(); }, 350);
+  });
+
+  function validate(input, wrap, error, errorMsg, btn) {
+    const clean = input.value.trim().replace(/^@/, "");
     if (!clean) {
       error.classList.remove("show");
       wrap.classList.remove("valid");
@@ -40,57 +56,64 @@
     btn.disabled = false;
   }
 
-  input.addEventListener("input", function () {
-    validate(this.value);
-  });
-
-  input.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && !btn.disabled) btn.click();
-  });
-
-  btn.addEventListener("click", async function () {
-    const username = input.value.trim().replace(/^@/, "");
-    if (!username || username.length < 3) return;
+  async function verify(username, endpoint, overlay, btn, error, errorMsg) {
+    const clean = username.trim().replace(/^@/, "");
+    if (!clean || clean.length < 3) return;
 
     btn.classList.add("loading");
     btn.disabled = true;
     error.classList.remove("show");
 
     try {
-      const res = await fetch("http://localhost:3002/api/verify-follow", {
+      const res = await fetch("http://localhost:3002/api/" + endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username: clean }),
       });
       const data = await res.json();
 
       if (data.verified) {
         localStorage.setItem(MODAL_KEY, "true");
-        overlay.classList.remove("active");
-        document.body.style.overflow = "";
+        hideOverlay(overlay);
       } else {
-        errorMsg.textContent = data.error || "Tu ne suis pas encore @activicode — abonne-toi et réessaie";
+        errorMsg.textContent = data.error || "Vérification échouée. Réessaie.";
         error.classList.add("show");
         btn.classList.remove("loading");
         btn.disabled = false;
       }
     } catch (err) {
-      errorMsg.textContent = "Serveur inaccessible. Vérifie que le serveur est lancé (npm start).";
+      errorMsg.textContent = "Serveur inaccessible. Vérifie que le serveur est lancé.";
       error.classList.add("show");
       btn.classList.remove("loading");
       btn.disabled = false;
     }
-  });
+  }
 
-  overlay.addEventListener("click", function (e) {
-    if (e.target === overlay) return;
-  });
+  /* ---- Instagram ---- */
+  {
+    const input = document.getElementById("igUsername");
+    const btn = document.getElementById("igVerifyBtn");
+    const error = document.getElementById("igError");
+    const errorMsg = document.getElementById("igErrorMsg");
+    const wrap = document.querySelector("#igModal .ig-modal-input-wrap");
 
-  setTimeout(() => {
-    overlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-    input.focus();
-  }, 400);
+    input.addEventListener("input", () => validate(input, wrap, error, errorMsg, btn));
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !btn.disabled) btn.click(); });
+    btn.addEventListener("click", () => verify(input.value, "verify-follow", igOverlay, btn, error, errorMsg));
+  }
+
+  /* ---- TikTok ---- */
+  {
+    const input = document.getElementById("ttUsername");
+    const btn = document.getElementById("ttVerifyBtn");
+    const error = document.getElementById("ttError");
+    const errorMsg = document.getElementById("ttErrorMsg");
+    const wrap = document.querySelector("#ttModal .ig-modal-input-wrap");
+
+    input.addEventListener("input", () => validate(input, wrap, error, errorMsg, btn));
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !btn.disabled) btn.click(); });
+    btn.addEventListener("click", () => verify(input.value, "verify-tt-follow", ttOverlay, btn, error, errorMsg));
+  }
 })();
 
 /* ---- TradingView ---- */
