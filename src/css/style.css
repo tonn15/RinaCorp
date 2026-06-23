@@ -279,6 +279,9 @@ button {
   gap: 5px;
   padding: 4px;
 }
+.nav-close {
+  display: none;
+}
 .nav-toggle span {
   display: block;
   width: 22px;
@@ -294,6 +297,19 @@ button {
 .hero {
   position: relative;
   overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
 }
 .hero-chart-bg {
   position: absolute;
@@ -1447,7 +1463,7 @@ footer {
     padding: 70px 0;
   }
   .hero-item {
-    min-height: 80vh;
+    min-height: 100vh;
   }
   .hero-text {
     text-align: center;
@@ -1467,7 +1483,15 @@ footer {
     padding: 70px 0;
   }
   .hero {
-    padding: 140px 0 80px;
+    padding: 0;
+  }
+  .hero::before,
+  .hero-overlay {
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .hero .owl-dots {
+    bottom: 16px;
   }
   .nav-links,
   .nav-actions {
@@ -1486,6 +1510,20 @@ footer {
   }
   .nav-links.open a {
     font-size: 22px;
+  }
+  .nav-links.open .nav-close {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 36px;
+    color: var(--cream-dim);
+    cursor: pointer;
+    padding: 8px 12px;
+    line-height: 1;
+    z-index: 10;
   }
   .nav-actions.open {
     display: flex;
@@ -1547,7 +1585,7 @@ footer {
 
 @media (max-width: 480px) {
   .hero-item {
-    min-height: 60vh;
+    min-height: 100vh;
   }
   .hero-text h2 {
     font-size: clamp(20px, 6vw, 26px);
@@ -1563,8 +1601,15 @@ footer {
     padding: 50px 0;
   }
   .hero {
-    padding: 120px 0 60px;
-    min-height: auto;
+    padding: 0;
+  }
+  .hero::before,
+  .hero-overlay {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .hero .owl-dots {
+    bottom: 5px;
   }
   .hero-title {
     font-size: clamp(30px, 10vw, 44px);
@@ -1580,6 +1625,8 @@ footer {
   .hero-cta .btn {
     width: 100%;
     justify-content: center;
+    padding: 12px 20px;
+    font-size: 14px;
   }
   .hero-pillars {
     grid-template-columns: 1fr 1fr;
@@ -1709,7 +1756,7 @@ footer {
     padding: 0 8px;
   }
   .hero {
-    padding: 100px 0 50px;
+    padding: 0;
   }
   .hero-pillars {
     grid-template-columns: 1fr 1fr;
