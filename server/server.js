@@ -13,11 +13,11 @@ app.use(express.json());
 const PORT = process.env.PORT || 3002;
 const IG_BOT_USERNAME = process.env.IG_BOT_USERNAME;
 const IG_BOT_PASSWORD = process.env.IG_BOT_PASSWORD;
-const IG_TARGET = process.env.IG_TARGET_USERNAME || "activicode";
+const IG_TARGET = process.env.IG_TARGET_USERNAME;
 const IG_SESSIONID = process.env.IG_SESSIONID;
 
 const TT_SESSIONID = process.env.TT_SESSIONID;
-const TT_TARGET = process.env.TT_TARGET_USERNAME || "activicode";
+const TT_TARGET = process.env.TT_TARGET_USERNAME;
 
 let browser;
 
@@ -494,6 +494,9 @@ app.post("/api/verify-tt-follow", async (req, res) => {
     res.json({ verified: false, error: err.message });
   }
 });
+
+if (!IG_TARGET) throw new Error("IG_TARGET_USERNAME manquant dans .env");
+if (!TT_TARGET) throw new Error("TT_TARGET_USERNAME manquant dans .env");
 
 app.listen(PORT, () => {
   console.log("✓ IG Verify server on http://localhost:" + PORT);
