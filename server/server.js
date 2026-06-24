@@ -570,14 +570,12 @@ function resolveFBUrl(input) {
   return { type: "username", value: clean };
 }
 
-async function getFBProfileDisplayName(page, input) {
+async function getFBProfileIdentifier(page, input) {
   const resolved = resolveFBUrl(input);
   let profileUrl;
 
   if (resolved.type === "id") {
     profileUrl = `https://web.facebook.com/profile.php?id=${resolved.value}`;
-  } else if (resolved.type === "username") {
-    profileUrl = `https://web.facebook.com/${resolved.value}`;
   } else {
     profileUrl = `https://web.facebook.com/${resolved.value}`;
   }
@@ -586,22 +584,58 @@ async function getFBProfileDisplayName(page, input) {
   await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
   await new Promise((r) => setTimeout(r, 3000));
 
-  // Try to get the display name from the page title
-  const displayName = await page.evaluate(() => {
-    const title = document.title.replace(" | Facebook", "").replace(" - Facebook", "").trim();
-    if (title && title.length < 100) return title.toLowerCase();
-    const h1 = document.querySelector("h1, [data-testid='profile_name'], [data-pagelet='ProfileTitle']");
-    if (h1) return h1.textContent.trim().toLowerCase();
-    return null;
-  }).catch(() => null);
+  const info = await page.evaluate(() => {
+    // Get the current URL (may have been redirected)
+    const currentUrl = window.location.href.toLowerCase();
 
-  return { name: displayName, id: resolved.value, resolved };
+    // Try to get the real display name from the page header
+    const nameEl = document.querySelector(
+      'h1, [data-testid="profile_name"], [data-pagelet="ProfileTitle"], ' +
+      '[data-testid="mw_profile_header_display_name"], ' +
+      'span[dir="auto"]:not([class*=" "]):not(:empty)'
+    );
+    let name = null;
+    if (nameEl) name = nameEl.textContent.trim();
+
+    // Fallback: extract from title
+    if (!name || name.length > 80) {
+      const title = document.title
+        .replace(/ \| Facebook$/, "")
+        .replace(/ - Facebook$/, "")
+        .trim();
+      if (title && title.length > 0 && title.length < 80 && !title.match(/^(facebook|meta|log in|connect|welcome)$/i)) {
+        name = title;
+      }
+    }
+
+    return { name: name ? name.toLowerCase() : null, currentUrl };
+  }).catch(() => ({ name: null, currentUrl: "" }));
+
+  // Also extract username or id from the current URL
+  let id = resolved.value;
+  let type = resolved.type;
+  try {
+    const url = new URL(info.currentUrl);
+    const pathParts = url.pathname.replace(/^\/+/, "").split("/");
+    if (pathParts[0] && pathParts[0] !== "profile.php") {
+      id = pathParts[0];
+      type = "username";
+    }
+    const urlId = url.searchParams.get("id");
+    if (urlId) { id = urlId; type = "id"; }
+  } catch (_) {}
+
+  // If the display name is generic, use the identifier instead
+  const name = (info.name && !info.name.match(/^(facebook|meta)$/)) ? info.name : id;
+
+  console.log("  → Profile identifier: \"" + name + "\" (type: " + type + ")");
+  return { name, id, type };
 }
 
-async function checkFBFollower(page, displayName) {
-  if (!displayName) return false;
+async function checkFBFollower(page, identifier) {
+  if (!identifier) return false;
 
-  console.log("  → Checking if \"" + displayName + "\" follows " + FB_TARGET);
+  console.log("  → Checking if \"" + identifier + "\" follows " + FB_TARGET);
 
   await page.goto(`https://web.facebook.com/${FB_TARGET}/followers`, {
     waitUntil: "domcontentloaded",
@@ -609,8 +643,17 @@ async function checkFBFollower(page, displayName) {
   });
   await new Promise((r) => setTimeout(r, 3000));
 
-  const html = await page.evaluate(() => document.documentElement.innerHTML.toLowerCase());
-  const found = html.includes(displayName.toLowerCase());
+  // Search specifically in profile links, not the entire HTML
+  const found = await page.evaluate((searchTerm) => {
+    const lower = searchTerm.toLowerCase();
+    const links = document.querySelectorAll('a[href*="facebook.com"], a[href*="/user/"], a[href*="profile.php"]');
+    for (const link of links) {
+      const href = link.getAttribute("href") || "";
+      const text = link.textContent.toLowerCase();
+      if (href.includes(lower) || href.includes("/" + lower) || text.includes(lower)) return true;
+    }
+    return false;
+  }, identifier);
 
   console.log(found ? "  ✓ trouvé" : "  ✗ pas trouvé");
   return found;
@@ -621,12 +664,7 @@ async function checkFbFollow(input) {
   const page = await createFBSession();
 
   try {
-    const { name, id, resolved } = await getFBProfileDisplayName(page, input);
-    if (!name) {
-      // Fallback: search by id or raw value in followers page
-      const fallback = await checkFBFollower(page, id || resolved.value);
-      return { verified: fallback, username: input };
-    }
+    const { name, id } = await getFBProfileIdentifier(page, input);
     const found = await checkFBFollower(page, name);
     return { verified: found, username: input };
   } finally {
