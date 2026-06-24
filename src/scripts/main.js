@@ -6,6 +6,7 @@
   const choiceOverlay = document.getElementById("choiceModal");
   const igOverlay = document.getElementById("igModal");
   const ttOverlay = document.getElementById("ttModal");
+  const fbOverlay = document.getElementById("fbModal");
   if (!choiceOverlay) return;
 
   function showOverlay(el) {
@@ -27,6 +28,11 @@
   document.getElementById("choiceTT").addEventListener("click", () => {
     hideOverlay(choiceOverlay);
     setTimeout(() => { showOverlay(ttOverlay); document.getElementById("ttUsername").focus(); }, 350);
+  });
+
+  document.getElementById("choiceFB").addEventListener("click", () => {
+    hideOverlay(choiceOverlay);
+    setTimeout(() => { showOverlay(fbOverlay); document.getElementById("fbUsername").focus(); }, 350);
   });
 
   function validate(input, wrap, error, errorMsg, btn) {
@@ -113,6 +119,37 @@
     input.addEventListener("input", () => validate(input, wrap, error, errorMsg, btn));
     input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !btn.disabled) btn.click(); });
     btn.addEventListener("click", () => verify(input.value, "verify-tt-follow", ttOverlay, btn, error, errorMsg));
+  }
+
+  /* ---- Facebook ---- */
+  {
+    const input = document.getElementById("fbUsername");
+    const btn = document.getElementById("fbVerifyBtn");
+    const error = document.getElementById("fbError");
+    const errorMsg = document.getElementById("fbErrorMsg");
+    const wrap = document.querySelector("#fbModal .ig-modal-input-wrap");
+
+    input.addEventListener("input", () => {
+      const clean = input.value.trim();
+      if (!clean) {
+        error.classList.remove("show");
+        wrap.classList.remove("valid");
+        btn.disabled = true;
+        return;
+      }
+      if (clean.length < 3) {
+        errorMsg.textContent = "Minimum 3 caractères";
+        error.classList.add("show");
+        wrap.classList.remove("valid");
+        btn.disabled = true;
+        return;
+      }
+      error.classList.remove("show");
+      wrap.classList.add("valid");
+      btn.disabled = false;
+    });
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !btn.disabled) btn.click(); });
+    btn.addEventListener("click", () => verify(input.value, "verify-fb-follow", fbOverlay, btn, error, errorMsg));
   }
 })();
 

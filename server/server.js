@@ -19,6 +19,10 @@ const IG_SESSIONID = process.env.IG_SESSIONID;
 const TT_SESSIONID = process.env.TT_SESSIONID;
 const TT_TARGET = process.env.TT_TARGET_USERNAME;
 
+const FB_TARGET = process.env.FB_TARGET_USERNAME;
+const FB_USER_ID = process.env.FB_USER_ID;
+const FB_XS = process.env.FB_XS;
+
 let browser;
 
 async function getBrowser() {
@@ -495,6 +499,157 @@ app.post("/api/verify-tt-follow", async (req, res) => {
   }
 });
 
+/* ==========================================
+   FACEBOOK VERIFICATION
+   ========================================== */
+
+async function createFBSession() {
+  console.log("  → Creating Facebook session...");
+  const b = await getBrowser();
+  const page = await b.newPage();
+  await page.setViewport({ width: 1280, height: 800 });
+  await page.setUserAgent(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+  );
+
+  if (!FB_USER_ID || !FB_XS) {
+    throw new Error("FB_USER_ID ou FB_XS manquant dans .env");
+  }
+
+  await page.goto("https://web.facebook.com/", {
+    waitUntil: "domcontentloaded",
+    timeout: 30000,
+  });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  // Set only the two essential session cookies
+  await page.setCookie(
+    { name: "c_user", value: FB_USER_ID, domain: ".facebook.com", path: "/", httpOnly: true, secure: true, sameSite: "None" },
+    { name: "xs", value: FB_XS, domain: ".facebook.com", path: "/", httpOnly: true, secure: true, sameSite: "None" }
+  );
+
+  await page.goto("https://web.facebook.com/", {
+    waitUntil: "domcontentloaded",
+    timeout: 30000,
+  });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  const hasSession = (await page.cookies()).some((c) => c.name === "c_user");
+  if (!hasSession) {
+    await page.screenshot({ path: "debug_fb_cookie_fail.png" });
+    await page.close();
+    throw new Error("Session Facebook invalide — vérifie FB_USER_ID et FB_XS dans .env");
+  }
+  console.log("  ✓ Session Facebook OK");
+  return page;
+}
+
+function resolveFBUrl(input) {
+  let clean = input.trim().replace(/^@/, "");
+
+  // Full URL: extract the path
+  if (clean.startsWith("http://") || clean.startsWith("https://")) {
+    try {
+      const url = new URL(clean);
+      clean = url.pathname.replace(/^\/+/, "").replace(/\/+$/, "") || url.searchParams.get("id") || clean;
+    } catch (_) {}
+  }
+
+  // profile.php?id=XXXX → just the id
+  if (clean.startsWith("profile.php")) {
+    const params = new URLSearchParams(clean.replace("profile.php?", ""));
+    const id = params.get("id");
+    if (id) return { type: "id", value: id };
+    return { type: "raw", value: clean };
+  }
+
+  // Numeric-only → id
+  if (/^\d+$/.test(clean)) return { type: "id", value: clean };
+
+  // Otherwise treat as username
+  return { type: "username", value: clean };
+}
+
+async function getFBProfileDisplayName(page, input) {
+  const resolved = resolveFBUrl(input);
+  let profileUrl;
+
+  if (resolved.type === "id") {
+    profileUrl = `https://web.facebook.com/profile.php?id=${resolved.value}`;
+  } else if (resolved.type === "username") {
+    profileUrl = `https://web.facebook.com/${resolved.value}`;
+  } else {
+    profileUrl = `https://web.facebook.com/${resolved.value}`;
+  }
+
+  console.log("  → Visiting profile: " + profileUrl);
+  await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  // Try to get the display name from the page title
+  const displayName = await page.evaluate(() => {
+    const title = document.title.replace(" | Facebook", "").replace(" - Facebook", "").trim();
+    if (title && title.length < 100) return title.toLowerCase();
+    const h1 = document.querySelector("h1, [data-testid='profile_name'], [data-pagelet='ProfileTitle']");
+    if (h1) return h1.textContent.trim().toLowerCase();
+    return null;
+  }).catch(() => null);
+
+  return { name: displayName, id: resolved.value, resolved };
+}
+
+async function checkFBFollower(page, displayName) {
+  if (!displayName) return false;
+
+  console.log("  → Checking if \"" + displayName + "\" follows " + FB_TARGET);
+
+  await page.goto(`https://web.facebook.com/${FB_TARGET}/followers`, {
+    waitUntil: "domcontentloaded",
+    timeout: 30000,
+  });
+  await new Promise((r) => setTimeout(r, 3000));
+
+  const html = await page.evaluate(() => document.documentElement.innerHTML.toLowerCase());
+  const found = html.includes(displayName.toLowerCase());
+
+  console.log(found ? "  ✓ trouvé" : "  ✗ pas trouvé");
+  return found;
+}
+
+async function checkFbFollow(input) {
+  console.log("  → Creating Facebook session...");
+  const page = await createFBSession();
+
+  try {
+    const { name, id, resolved } = await getFBProfileDisplayName(page, input);
+    if (!name) {
+      // Fallback: search by id or raw value in followers page
+      const fallback = await checkFBFollower(page, id || resolved.value);
+      return { verified: fallback, username: input };
+    }
+    const found = await checkFBFollower(page, name);
+    return { verified: found, username: input };
+  } finally {
+    await page.close();
+  }
+}
+
+app.post("/api/verify-fb-follow", async (req, res) => {
+  const { username } = req.body;
+  console.log("\n=== Facebook Verify @" + (username || "?") + " ===");
+  if (!username || username.trim().length < 3) {
+    return res.json({ verified: false, error: "Username invalide" });
+  }
+  try {
+    const result = await checkFbFollow(username);
+    console.log("  ✓ Done:", JSON.stringify(result));
+    res.json(result);
+  } catch (err) {
+    console.error("  ✗ Error:", err.message);
+    res.json({ verified: false, error: err.message });
+  }
+});
+
 if (!IG_TARGET) throw new Error("IG_TARGET_USERNAME manquant dans .env");
 if (!TT_TARGET) throw new Error("TT_TARGET_USERNAME manquant dans .env");
 
@@ -502,4 +657,5 @@ app.listen(PORT, () => {
   console.log("✓ IG Verify server on http://localhost:" + PORT);
   console.log("✓ Checking follows for @" + IG_TARGET);
   console.log("✓ Checking TikTok follows for @" + TT_TARGET);
+  if (FB_TARGET) console.log("✓ Checking Facebook follows for " + FB_TARGET);
 });
