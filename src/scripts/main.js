@@ -71,7 +71,7 @@
     error.classList.remove("show");
 
     try {
-      const res = await fetch("http://localhost:3002/api/" + endpoint, {
+      const res = await fetch("https://rinacorp.onrender.com/api/" + endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: clean }),
