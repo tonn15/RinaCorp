@@ -1,3 +1,6 @@
+// DOIT être la toute première ligne — avant tout require puppeteer
+process.env.PUPPETEER_CACHE_DIR = "/opt/render/project/.cache/puppeteer";
+
 const express = require("express");
 const cors = require("cors");
 const { execSync } = require("child_process");
@@ -9,15 +12,15 @@ require("dotenv").config();
 
 puppeteer.use(StealthPlugin());
 
+const CHROME_CACHE = "/opt/render/project/.cache/puppeteer";
 try {
   require("puppeteer").executablePath();
 } catch {
   console.log("→ Chrome not found, installing...");
-  const cfg = require("./.puppeteerrc.cjs");
-  const chromeDir = path.join(cfg.cacheDirectory, "chrome");
+  const chromeDir = path.join(CHROME_CACHE, "chrome");
   if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
   execSync(
-    `npx @puppeteer/browsers install chrome@131.0.6778.204 --path "${cfg.cacheDirectory}"`,
+    `npx @puppeteer/browsers install chrome@131.0.6778.204 --path "${CHROME_CACHE}"`,
     { stdio: "inherit" }
   );
   console.log("→ Chrome installed");
