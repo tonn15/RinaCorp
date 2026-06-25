@@ -29,7 +29,6 @@ async function getBrowser() {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
       headless: true,
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -691,8 +690,8 @@ app.post("/api/verify-fb-follow", async (req, res) => {
 if (!IG_TARGET) throw new Error("IG_TARGET_USERNAME manquant dans .env");
 if (!TT_TARGET) throw new Error("TT_TARGET_USERNAME manquant dans .env");
 
-app.listen(PORT, () => {
-  console.log("✓ IG Verify server on http://localhost:" + PORT);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("✓ IG Verify server on http://0.0.0.0:" + PORT);
   console.log("✓ Checking follows for @" + IG_TARGET);
   console.log("✓ Checking TikTok follows for @" + TT_TARGET);
   if (FB_TARGET) console.log("✓ Checking Facebook follows for " + FB_TARGET);
