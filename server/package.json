@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "npx @puppeteer/browsers install chrome@131.0.6778.204 --path /opt/render/project/.cache/puppeteer",
+    "postinstall": "rm -rf /opt/render/project/.cache/puppeteer/chrome && npx @puppeteer/browsers install chrome@131.0.6778.204 --path /opt/render/project/.cache/puppeteer",
     "start": "node server.js",
     "dev": "node server.js"
   },
