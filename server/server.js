@@ -1,3 +1,6 @@
+// MUST be set before any puppeteer require
+process.env.PUPPETEER_CACHE_DIR = process.env.PUPPETEER_CACHE_DIR || "/opt/render/project/.cache/puppeteer";
+
 const express = require("express");
 const cors = require("cors");
 const { execSync } = require("child_process");
@@ -12,11 +15,9 @@ try {
   require("puppeteer").executablePath();
 } catch {
   console.log("→ Chrome not found, installing...");
-  const cacheDir = process.env.PUPPETEER_CACHE_DIR ||
-    "/opt/render/project/.cache/puppeteer";
-  const chromeDir = require("path").join(cacheDir, "chrome");
+  const chromeDir = require("path").join(process.env.PUPPETEER_CACHE_DIR, "chrome");
   if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
-  execSync("npx @puppeteer/browsers install chrome@131.0.6778.204 --path " + cacheDir, { stdio: "inherit" });
+  execSync("npx @puppeteer/browsers install chrome@131.0.6778.204 --path " + process.env.PUPPETEER_CACHE_DIR, { stdio: "inherit" });
   console.log("→ Chrome installed");
 }
 
