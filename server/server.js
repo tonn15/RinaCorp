@@ -1,10 +1,24 @@
 const express = require("express");
 const cors = require("cors");
+const { execSync } = require("child_process");
+const { existsSync, rmSync } = require("fs");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 require("dotenv").config();
 
 puppeteer.use(StealthPlugin());
+
+try {
+  require("puppeteer").executablePath();
+} catch {
+  console.log("→ Chrome not found, installing...");
+  const cacheDir = process.env.PUPPETEER_CACHE_DIR ||
+    require("path").join(process.env.HOME || "/opt/render", ".cache", "puppeteer");
+  const chromeDir = require("path").join(cacheDir, "chrome");
+  if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
+  execSync("npx @puppeteer/browsers install chrome@131.0.6778.204 --path " + cacheDir, { stdio: "inherit" });
+  console.log("→ Chrome installed");
+}
 
 const app = express();
 app.use(cors());
