@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "postinstall": "puppeteer browsers install chrome"
+    "postinstall": "node install-chrome.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
