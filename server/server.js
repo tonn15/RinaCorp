@@ -47,16 +47,12 @@ let browser;
 
 async function getBrowser() {
   if (!browser || !browser.isConnected()) {
-    const chromiumPath = require("puppeteer").executablePath();
     browser = await puppeteer.launch({
-      executablePath: chromiumPath,
+      executablePath: "/opt/render/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome",
       headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
-        "--window-size=1280,800",
-        "--no-proxy-server",
-        "--disable-blink-features=AutomationControlled",
         "--disable-dev-shm-usage",
       ],
     });
