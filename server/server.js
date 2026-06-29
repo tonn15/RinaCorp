@@ -13,15 +13,13 @@ require("dotenv").config();
 puppeteer.use(StealthPlugin());
 
 const CHROME_CACHE = path.join(__dirname, ".cache", "puppeteer");
-try {
-  require("puppeteer").executablePath();
-} catch {
+if (!existsSync(require("puppeteer").executablePath())) {
   console.log("→ Chrome not found, installing...");
   const chromeDir = path.join(CHROME_CACHE, "chrome");
   if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
   execSync(
-    `node node_modules/puppeteer/lib/cjs/puppeteer/node/cli.js browsers install chrome`,
-    { stdio: "inherit" }
+    `node node_modules/@puppeteer/browsers/lib/cjs/main-cli.js install chrome@131.0.6778.204 --path "${CHROME_CACHE}"`,
+    { stdio: "inherit", cwd: __dirname }
   );
   console.log("→ Chrome installed");
 }

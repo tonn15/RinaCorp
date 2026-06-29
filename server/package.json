@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "rm -rf .cache && node node_modules/puppeteer/lib/cjs/puppeteer/node/cli.js browsers install chrome",
+    "postinstall": "node -e \"require('@puppeteer/browsers').install({cacheDir:require('path').join(__dirname,'.cache','puppeteer'),browser:'chrome',buildId:'131.0.6778.204'}).catch(()=>{})\"",
     "start": "node server.js",
     "dev": "node server.js"
   },
