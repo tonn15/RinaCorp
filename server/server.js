@@ -1,5 +1,5 @@
 // DOIT être la toute première ligne — avant tout require puppeteer
-process.env.PUPPETEER_CACHE_DIR = "/opt/render/project/.cache/puppeteer";
+process.env.PUPPETEER_CACHE_DIR = "/opt/render/.cache/puppeteer";
 
 const express = require("express");
 const cors = require("cors");
@@ -12,7 +12,7 @@ require("dotenv").config();
 
 puppeteer.use(StealthPlugin());
 
-const CHROME_CACHE = "/opt/render/project/.cache/puppeteer";
+const CHROME_CACHE = "/opt/render/.cache/puppeteer";
 try {
   require("puppeteer").executablePath();
 } catch {
@@ -47,7 +47,9 @@ let browser;
 
 async function getBrowser() {
   if (!browser || !browser.isConnected()) {
+    const chromiumPath = require("puppeteer").executablePath();
     browser = await puppeteer.launch({
+      executablePath: chromiumPath,
       headless: true,
       args: [
         "--no-sandbox",
