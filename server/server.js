@@ -31,9 +31,11 @@ async function getBrowser() {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
       args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
+      defaultViewport: { width: 1280, height: 900 },
       executablePath: await chromium.executablePath(),
       headless: chromium.headless,
+      timeout: 90000,
+      protocolTimeout: 90000,
     });
     console.log("→ Browser lancé avec succès");
   }
@@ -51,10 +53,7 @@ async function createSession() {
 
   if (IG_SESSIONID) {
     console.log("  → Using session cookie from .env");
-    await page.goto("https://www.instagram.com/", {
-      waitUntil: "domcontentloaded",
-      timeout: 30000,
-    });
+    await page.goto("https://www.instagram.com/", { waitUntil: "domcontentloaded" });
     await new Promise((r) => setTimeout(r, 3000));
 
     // Set the sessionid cookie
@@ -68,10 +67,7 @@ async function createSession() {
     });
 
     // Reload to verify session works
-    await page.goto("https://www.instagram.com/", {
-      waitUntil: "networkidle2",
-      timeout: 30000,
-    });
+    await page.goto("https://www.instagram.com/", { waitUntil: "networkidle2" });
     await new Promise((r) => setTimeout(r, 3000));
 
     const hasSession = (await page.cookies()).some((c) => c.name === "sessionid");
@@ -87,7 +83,6 @@ async function createSession() {
 
   await page.goto("https://www.instagram.com/accounts/login/", {
     waitUntil: "domcontentloaded",
-    timeout: 30000,
   });
   await new Promise((r) => setTimeout(r, 4000));
   console.log("  ✓ Login page loaded");
@@ -125,12 +120,12 @@ async function createSession() {
   const loginBtn = await page.$('button[type="submit"]') || await page.$('button:not([type])');
   if (loginBtn) {
     console.log("  → Clicking submit button");
-    const navPromise = page.waitForNavigation({ waitUntil: "networkidle2", timeout: 25000 }).catch(() => null);
+    const navPromise = page.waitForNavigation({ waitUntil: "networkidle2" }).catch(() => null);
     await loginBtn.click();
     await navPromise;
   } else {
     console.log("  → Pressing Enter");
-    const navPromise = page.waitForNavigation({ waitUntil: "networkidle2", timeout: 25000 }).catch(() => null);
+    const navPromise = page.waitForNavigation({ waitUntil: "networkidle2" }).catch(() => null);
     await page.keyboard.press("Enter");
     await navPromise;
   }
@@ -200,7 +195,7 @@ async function getUserId(page, username) {
 
   // Fallback: navigate to profile page and try to extract ID
   console.log("  → Loading profile page...");
-  await page.goto(`https://www.instagram.com/${username}/`, { waitUntil: "domcontentloaded", timeout: 20000 });
+  await page.goto(`https://www.instagram.com/${username}/`, { waitUntil: "domcontentloaded" });
   await new Promise((r) => setTimeout(r, 3000));
   console.log("  [DEBUG] Profile URL:", page.url());
 
@@ -302,7 +297,6 @@ async function createTTSession() {
 
   await page.goto("https://www.tiktok.com/", {
     waitUntil: "domcontentloaded",
-    timeout: 60000,
   });
   await new Promise((r) => setTimeout(r, 3000));
 
@@ -315,7 +309,7 @@ async function createTTSession() {
     secure: true,
   });
 
-  await page.reload({ waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.reload({ waitUntil: "domcontentloaded" });
   await new Promise((r) => setTimeout(r, 3000));
 
   const hasSession = (await page.cookies()).some((c) => c.name === "sessionid");
@@ -357,7 +351,6 @@ async function getTTUserInfo(page, targetUsername) {
 
   await page.goto(`https://www.tiktok.com/@${targetUsername}`, {
     waitUntil: "networkidle2",
-    timeout: 60000,
   });
 
   let userInfo = await apiPromise;
@@ -391,7 +384,6 @@ async function checkTTFollowers(page, secUid, followerName) {
 
   await page.goto(`https://www.tiktok.com/@${followerName}`, {
     waitUntil: "domcontentloaded",
-    timeout: 60000,
   });
 
   await page.waitForFunction(
@@ -518,7 +510,6 @@ async function createFBSession() {
 
   await page.goto("https://web.facebook.com/", {
     waitUntil: "domcontentloaded",
-    timeout: 30000,
   });
   await new Promise((r) => setTimeout(r, 3000));
 
@@ -530,7 +521,6 @@ async function createFBSession() {
 
   await page.goto("https://web.facebook.com/", {
     waitUntil: "domcontentloaded",
-    timeout: 30000,
   });
   await new Promise((r) => setTimeout(r, 3000));
 
@@ -581,7 +571,7 @@ async function getFBProfileIdentifier(page, input) {
   }
 
   console.log("  → Visiting profile: " + profileUrl);
-  await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
+  await page.goto(profileUrl, { waitUntil: "domcontentloaded" });
   await new Promise((r) => setTimeout(r, 3000));
 
   const info = await page.evaluate(() => {
@@ -639,7 +629,6 @@ async function checkFBFollower(page, identifier) {
 
   await page.goto(`https://web.facebook.com/${FB_TARGET}/followers`, {
     waitUntil: "domcontentloaded",
-    timeout: 30000,
   });
   await new Promise((r) => setTimeout(r, 3000));
 
