@@ -1,28 +1,11 @@
-// DOIT être la toute première ligne — avant tout require puppeteer
-process.env.PUPPETEER_CACHE_DIR = require("path").join(__dirname, ".cache", "puppeteer");
-
 const express = require("express");
 const cors = require("cors");
-const { execSync } = require("child_process");
-const { existsSync, rmSync } = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 require("dotenv").config();
 
 puppeteer.use(StealthPlugin());
-
-const CHROME_CACHE = path.join(__dirname, ".cache", "puppeteer");
-if (!existsSync(require("puppeteer").executablePath())) {
-  console.log("→ Chrome not found, installing...");
-  const chromeDir = path.join(CHROME_CACHE, "chrome");
-  if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
-  execSync(
-    `node node_modules/@puppeteer/browsers/lib/cjs/main-cli.js install chrome@131.0.6778.204 --path "${CHROME_CACHE}"`,
-    { stdio: "inherit", cwd: __dirname }
-  );
-  console.log("→ Chrome installed");
-}
 
 const app = express();
 app.use(cors());
@@ -46,7 +29,7 @@ let browser;
 async function getBrowser() {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
-      executablePath: require("puppeteer").executablePath(),
+      executablePath: "/usr/bin/google-chrome-stable",
       headless: true,
       args: [
         "--no-sandbox",
