@@ -20,7 +20,7 @@ try {
   const chromeDir = path.join(CHROME_CACHE, "chrome");
   if (existsSync(chromeDir)) rmSync(chromeDir, { recursive: true, force: true });
   execSync(
-    `npx @puppeteer/browsers install chrome@131.0.6778.204 --path "${CHROME_CACHE}"`,
+    `npx @puppeteer/browsers install chrome@131 --path "${CHROME_CACHE}"`,
     { stdio: "inherit" }
   );
   console.log("→ Chrome installed");
