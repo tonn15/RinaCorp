@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 require("dotenv").config();
@@ -27,6 +26,7 @@ const FB_XS = process.env.FB_XS;
 let browser;
 
 async function getBrowser() {
+  console.log("→ Lancement du navigateur sur Render...");
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
       executablePath: "/usr/bin/google-chrome-stable",
@@ -35,8 +35,15 @@ async function getBrowser() {
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--single-process",
+        "--no-zygote",
+        "--disable-extensions",
+        "--disable-background-networking",
       ],
+      timeout: 90000,
     });
+    console.log("→ Browser lancé avec succès sur Render");
   }
   return browser;
 }
