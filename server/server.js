@@ -1,3 +1,4 @@
+const chromium = require("@sparticuz/chromium");
 const express = require("express");
 const cors = require("cors");
 const puppeteer = require("puppeteer-extra");
@@ -26,24 +27,15 @@ const FB_XS = process.env.FB_XS;
 let browser;
 
 async function getBrowser() {
-  console.log("→ Lancement du navigateur sur Render...");
+  console.log("→ Lancement du navigateur...");
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
-      executablePath: "/usr/bin/google-chrome-stable",
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--single-process",
-        "--no-zygote",
-        "--disable-extensions",
-        "--disable-background-networking",
-      ],
-      timeout: 90000,
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
-    console.log("→ Browser lancé avec succès sur Render");
+    console.log("→ Browser lancé avec succès");
   }
   return browser;
 }
