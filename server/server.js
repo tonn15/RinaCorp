@@ -48,7 +48,7 @@ let browser;
 async function getBrowser() {
   if (!browser || !browser.isConnected()) {
     browser = await puppeteer.launch({
-      executablePath: "/opt/render/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome",
+      executablePath: require("puppeteer").executablePath(),
       headless: true,
       args: [
         "--no-sandbox",
