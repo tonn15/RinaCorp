@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "rm -rf .cache/puppeteer && node -e \"(async()=>{await require('@puppeteer/browsers').install({cacheDir:require('path').join(__dirname,'.cache','puppeteer'),browser:'chrome',buildId:'131.0.6778.204'});})()\"",
+    "postinstall": "rm -rf .cache/puppeteer && node -e \"(async()=>{await require('@puppeteer/browsers').install({cacheDir:require('path').join(process.cwd(),'.cache','puppeteer'),browser:'chrome',buildId:'131.0.6778.204'});})()\"",
     "start": "node server.js",
     "dev": "node server.js"
   },
