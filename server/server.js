@@ -43,6 +43,7 @@ async function getBrowser() {
 async function createSession() {
   const b = await getBrowser();
   const page = await b.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.setViewport({ width: 390, height: 844 });
   await page.setUserAgent(
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
@@ -293,6 +294,7 @@ async function createTTSession() {
   console.log("  → Creating TikTok session...");
   const b = await getBrowser();
   const page = await b.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.setViewport({ width: 1280, height: 800 });
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
@@ -504,6 +506,7 @@ async function createFBSession() {
   console.log("  → Creating Facebook session...");
   const b = await getBrowser();
   const page = await b.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.setViewport({ width: 1280, height: 800 });
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
